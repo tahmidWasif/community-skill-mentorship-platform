@@ -23,14 +23,18 @@ int main() {
 
         switch (userInput) {
             case 1:
+                system("cls");
                 //signUp()
                 break;
             case 2:
+                system("cls");
                 //login()
                 break;
             case 3:
+                system("cls");
                 exit(0);
             default:
+                system("cls");
                 printf("\nPlease enter a valid choice.\n");
                 break;
         }
