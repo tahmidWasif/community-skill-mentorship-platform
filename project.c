@@ -72,7 +72,7 @@ void getPassword(char password[MAX_PASSWORD_LENGTH]) {
 
             if (i >= 0){
                 password[i] = '\0';
-                i--;            //i is decremented so that it points to the index where '\0' is at after the for loop increments i
+                i--;            //i is decremented so that it points to the index where '\0' is at after i is incremented by the for loop
                 continue;
             }
 
