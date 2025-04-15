@@ -98,6 +98,9 @@ void getPassword(char password[MAX_PASSWORD_LENGTH]) {
 void signUp(){
     char username[MAX_USERNAME_LENGTH], password[MAX_PASSWORD_LENGTH], checkPassword[MAX_PASSWORD_LENGTH];
     int userChoice, valid = 0;
+    const char* usersFile = "users.txt";
+    FILE* filePtr;
+    filePtr = fopen(usersFile, "a+");
     
     while (!valid){
         printf("\nWhat type of account do you want to create?\n");
@@ -140,12 +143,14 @@ void signUp(){
         learnerUser = (learner *)malloc(sizeof(learner));
         strcpy(learnerUser->username, username);
         strcpy(learnerUser->password, password);
+        fprintf(filePtr, "%s,%s,learner\n", username, password);
     }
     else {
         mentor* mentorUser;
         mentorUser = (mentor *)malloc(sizeof(mentor));
         strcpy(mentorUser->username, username);
         strcpy(mentorUser->password, password);
+        fprintf(filePtr, "%s,%s,mentor\n", username, password);
     }
-    
+    fclose(filePtr);
 }
