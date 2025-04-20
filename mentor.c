@@ -70,9 +70,10 @@ void signup_user() {
     char username[50], password[50], course[100];
     FILE *fp = fopen("users.txt", "a");
     printf("Choose a username: ");
-    scanf("%s", username);
+    scanf("%[^\n]", username);
     printf("Choose a password: ");
     getPassword(password);
+    printf("Enter your IP address: ");
     printf("Which course will you mentor?: ");
     scanf(" %[^\n]", course);
     if (fp) {
@@ -98,7 +99,7 @@ void view_issues(const char *mentor_course) {
     for (int j = 0; course_upper[j]; j++) {
         course_upper[j] = toupper(course_upper[j]);
     }
-
+    //needs changes for IP
     printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
     while (fgets(line, sizeof(line), fp)) {
         char *token = strtok(line, ",");
@@ -240,11 +241,16 @@ void mentor_entry() {
             case 1: view_issues(mentor_course); break;
             case 2: add_comment(mentor_course); break;
             case 3: {
-                char ip[20];
-                printf("Enter learner IP address: ");
-                scanf("%s", ip);
-                getchar();
-                udp_chat(ip);
+                //select learner like in manage_issues()
+                int user;
+                view_issues(mentor_course);
+                printf("Enter the learner ID you want to chat with: ");
+                scanf("%d", &user);
+                char str[512];
+                char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
+                system(sentence);
+                sprintf(str, ".\\chatwinver.exe %s", ""); //needs learner IP
+                system(str);
                 break;
             }
             case 4: printf("Returning to main menu...\n"); break;

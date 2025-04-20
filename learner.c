@@ -51,7 +51,7 @@ void set_color(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-int validate_user(const char *username, const char *password) {
+int validate_user(const char *username, const char *password) {     //check if username exists
     FILE *fp = fopen("users.txt", "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
@@ -68,12 +68,16 @@ int validate_user(const char *username, const char *password) {
 }
 
 void signup_user() {
-    char username[50], password[50];
+    char username[50], password[50], ip[20];
     FILE *fp = fopen("users.txt", "a");
     printf("Choose a username: ");
     scanf("%s", username);
     printf("Choose a password: ");
     getPassword(password);
+    printf("Enter IPv4 address: ");
+    fgets(ip, sizeof(ip), stdin);
+    ip[strlen(ip)-1] = '\0';        //removes newline character
+
     if (fp) {
         fprintf(fp, "%s,%s,2\n", username, password);
         fclose(fp);
@@ -84,7 +88,7 @@ void signup_user() {
 }
 
 void submit_issue(const char *username) {
-    char course[100], issue[256];
+    char course[100], issue[256], ip[20];
     set_color(11);
     printf("Enter course title: ");
     set_color(15);
@@ -93,10 +97,15 @@ void submit_issue(const char *username) {
     printf("Describe your issue: ");
     set_color(15);
     scanf(" %[^\n]", issue);
+    set_color(11);
+    printf("Enter your IP address: ");
+    set_color(15);
+    scanf(" %[^\n]", ip);
+    
 
     FILE *fp = fopen(ISSUE_FILE, "a");
     if (fp) {
-        fprintf(fp, "%s,%s,%s,127.0.0.1\n", username, course, issue);
+        fprintf(fp, "%s,%s,%s,%s\n", username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
         set_color(10);
         printf("Issue submitted!\n");
@@ -132,48 +141,6 @@ void view_comments(const char *username) {
     }
     fclose(fp);
     set_color(15);
-}
-
-void udp_chat(const char *mentor_ip) {
-    WSADATA wsa;
-    SOCKET s;
-    struct sockaddr_in self, peer;
-    int slen = sizeof(peer);
-    char buf[512], message[512];
-    FILE *log = fopen(CHAT_LOG_FILE, "a");
-
-    WSAStartup(MAKEWORD(2, 2), &wsa);
-    s = socket(AF_INET, SOCK_DGRAM, 0);
-
-    memset(&self, 0, sizeof(self));
-    self.sin_family = AF_INET;
-    self.sin_port = htons(8889);
-    self.sin_addr.s_addr = INADDR_ANY;
-    bind(s, (struct sockaddr *)&self, sizeof(self));
-
-    memset(&peer, 0, sizeof(peer));
-    peer.sin_family = AF_INET;
-    peer.sin_port = htons(8888);
-    peer.sin_addr.s_addr = inet_addr(mentor_ip);
-
-    printf("[ UDP Chat - Type 'quit' to leave ]\n");
-
-    while (1) {
-        printf("You: ");
-        fgets(message, 512, stdin);
-        sendto(s, message, strlen(message), 0, (struct sockaddr *)&peer, slen);
-        if (log) fprintf(log, "Learner: %s", message);
-        if (strncmp(message, "quit", 4) == 0) break;
-
-        int recv_len = recvfrom(s, buf, 512, 0, (struct sockaddr *)&peer, &slen);
-        buf[recv_len] = '\0';
-        printf("Mentor: %s\n", buf);
-        if (log) fprintf(log, "Mentor: %s\n", buf);
-    }
-
-    if (log) fclose(log);
-    closesocket(s);
-    WSACleanup();
 }
 
 void learner_entry() {
@@ -237,7 +204,7 @@ void manage_issues(const char *username) {
         sscanf(lines[count], "%[^,],%[^,],%[^,],%s", users[count], courses[count], issues[count], ips[count]);
         if (strcmp(users[count], username) == 0) {
             count++;
-        }
+        } 
     }
     fclose(fp);
 
@@ -271,6 +238,32 @@ void manage_issues(const char *username) {
         printf("No issue deleted.\n");
     }
 }
+
+void delete_user() {
+
+}
+
+
+void update_user() {
+    char username[50], password[50], ip[20];
+    FILE *fp = fopen("users.txt", "a");
+    printf("Choose a username: ");
+    scanf("%s", username);
+    printf("Choose a password: ");
+    getPassword(password);
+    printf("Enter IPv4 address: ");
+    fgets(ip, sizeof(ip), stdin);
+    ip[strlen(ip)-1] = '\0';        //removes newline character
+
+    if (fp) {
+        fprintf(fp, "%s,%s,2\n", username, password);
+        fclose(fp);
+        printf("Update successful! Please log in.\n");
+    } else {
+        printf("Failed to register.\n");
+    }
+}
+
 int main() {
     int choice;
     while (1) {
