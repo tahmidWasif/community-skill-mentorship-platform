@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #define MAX_PASSWORD_LENGTH 50
-#define MAX_USERNAME_LENGTH 50
 
 void getPassword(char password[MAX_PASSWORD_LENGTH]) {
     for (int i = 0; i < MAX_PASSWORD_LENGTH - 1; i++) {

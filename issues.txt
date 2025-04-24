@@ -4,3 +4,4 @@ wasif,CS,a,127.0.0.1
 wasif,MATH,b,127.0.0.1
 wasif,CS,c,127.0.0.1
 m,CS,m,127.0.0.1
+newLearner,MATH,Polar coordinates,whatever

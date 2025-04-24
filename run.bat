@@ -10,7 +10,7 @@ echo 4. Exit
 set /p choice=Enter choice (1, 2, 3, or 4): 
 
 if "%choice%"=="1" (
-    gcc server.c -o server.exe
+    gcc server.c getPassword.c -o server.exe
     if errorlevel 1 (
         echo Compilation failed.
         pause
@@ -19,7 +19,7 @@ if "%choice%"=="1" (
     server.exe
     goto menu
 ) else if "%choice%"=="2" (
-    gcc learner.c -o learner.exe -lws2_32
+    gcc learner.c getPassword.c -o learner.exe -lws2_32
     if errorlevel 1 (
         echo Compilation failed.
         pause
@@ -28,7 +28,7 @@ if "%choice%"=="1" (
     learner.exe
     goto menu
 ) else if "%choice%"=="3" (
-    gcc mentor.c -o mentor.exe -lws2_32
+    gcc mentor.c getPassword.c -o mentor.exe -lws2_32
     if errorlevel 1 (
         echo Compilation failed.
         pause

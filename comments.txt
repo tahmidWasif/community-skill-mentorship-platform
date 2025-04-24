@@ -1,2 +1,3 @@
 wasif,CS,get better
 wasif,CS,nice
+wasif,MATH,b -> c
