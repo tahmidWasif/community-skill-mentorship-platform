@@ -3,3 +3,4 @@ wasif,pass,2
 k,pass,1,CS
 b,pass,1,MATH
 m,pass,2
+mahib,,2
