@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 
     printf("\nOpening Network Chat. (Type 'quit' to end chat).\n\n");
     // Print heading so that sent and received messages are in different columns
-    printf("Sent\t\t\t\t\t\t\t\t\t\t\tReceived\n");
+    printf("Sent\t\t\t\t\t\t\t\t\t\t\tReceived\n\n");
     
     // Start chat loop until someone types a string starting with QUIT
     while(!quit)
@@ -98,7 +98,8 @@ int main(int argc, char* argv[])
                 }
             }
     }
-    printf("\nSession Terminated\n");
+    system("cls");
+    printf("Session Terminated\n");
     // Closes udp listener port
     closeUdpListenerPort();
     #ifdef _WIN32

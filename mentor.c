@@ -19,6 +19,10 @@
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_USERNAME_LENGTH 50
 
+//function prototypes
+void get_learner_ip(char [], char []);
+void learner_chat();
+
 int validate_user(const char *username, const char *password, char *mentor_course) {
     FILE *fp = fopen(MENTOR_FILE, "r");
     if (!fp) return 0;
@@ -36,9 +40,20 @@ int validate_user(const char *username, const char *password, char *mentor_cours
 
 void signup_user() {
     char username[50], password[50], course[100], ip[20];
-    FILE *fp = fopen(MENTOR_FILE, "a");
+    FILE *fp = fopen(MENTOR_FILE, "a+");
+    signUp:
     printf("Choose a username: ");
     scanf("%s", username);
+    //validate if username already exists
+    char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
+    rewind(fp);
+    while (fgets(line, sizeof(line), fp)) {
+        sscanf(line, "%[^,],%[^\n]", u, p);
+        if (strcmp(u, username) == 0) {
+            printf("\nUsername already exists.\n\n");
+            goto signUp;
+        }
+    }
     printf("Choose a password: ");
     getPassword(password);
     printf("Enter your IP address: ");
@@ -61,7 +76,7 @@ void view_issues(const char *mentor_course) {
         return;
     }
 
-    char line[512], username[50], course[100], issue[256], ip[20];
+    char line[512], username[50], course[100], issue[256], ip[20], id[3];
     int count = 1;
     char course_upper[100];
     strcpy(course_upper, mentor_course);
@@ -72,6 +87,8 @@ void view_issues(const char *mentor_course) {
     printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
     while (fgets(line, sizeof(line), fp)) {
         char *token = strtok(line, ",");
+        if (token) strcpy(id, token);
+        token = strtok(NULL, ",");
         if (token) strcpy(username, token);
         token = strtok(NULL, ",");
         if (token) strcpy(course, token);
@@ -92,7 +109,7 @@ void view_issues(const char *mentor_course) {
     set_color(15);
 }
 
-void add_comment(const char *mentor_course) {
+void add_comment(const char *mentor_course, const char* mentorUsername) {
     view_issues(mentor_course);
     int selected;
     printf("\nSelect an Issue ID to comment on: ");
@@ -107,17 +124,9 @@ void add_comment(const char *mentor_course) {
     }
 
     char line[512], username[50], course[100], issue[256], ip[20];
-    int count = 1;
+    int count = 1, id;
     while (fgets(line, sizeof(line), fp)) {
-        char *token = strtok(line, ",");
-        if (token) strcpy(username, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(course, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(issue, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(ip, token);
-        ip[strcspn(ip, "\n")] = 0;
+        sscanf(line, "%d,%[^,],%[^,],%[^,],%[^\n]", &id, username, course, issue, ip);
 
         if (_stricmp(course, mentor_course) != 0) continue;
         if (count == selected) {
@@ -126,8 +135,8 @@ void add_comment(const char *mentor_course) {
             printf("Enter your comment: ");
             set_color(15);
             fgets(comment, 256, stdin);
-            comment[strcspn(comment, "\n")] = 0;
-            fprintf(cfp, "%s,%s,%s\n", username, course, comment);
+            comment[strcspn(comment, "\n")] = '\0';
+            fprintf(cfp, "%d,%s,%s,%s,%s\n", id, username, course, comment, mentorUsername);
             set_color(10);
             printf("Comment added successfully!\n");
             break;
@@ -139,24 +148,77 @@ void add_comment(const char *mentor_course) {
     set_color(15);
 }
 
-void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
-    char courses[100], users[MAX_USERNAME_LENGTH], issues[256], lines[512];
+void learner_chat(const char* mentor_course){
+    char ip[20], user[MAX_USERNAME_LENGTH];
+    
+    //view mentor list according to Course
+    view_issues(mentor_course);
+    //select mentor to chat with
+    printf("Enter learner username (0 to exit): ");
+    fgets(user, sizeof(user), stdin);
+    user[strcspn(user, "\n")] = '\0';   //removes \n
+
+    if (strcmp(user, "0") == 0){
+        printf("Exiting...\n");
+        return;
+    }
+
+    char courses[100], users[MAX_USERNAME_LENGTH], issues[256], lines[512], tempIp[20], garbage[3];
     FILE* fp = fopen(ISSUE_FILE, "r");
     if (fp) {
         while (fgets(lines, sizeof(lines), fp) != NULL) {
-            sscanf(lines, "%[^,],%[^,],%[^,],%s", users, courses, issues, ip);
+            sscanf(lines, "%[^,],%[^,],%[^,],%[^,],%[^\n]", garbage, users, courses, issues, tempIp);
             if (strcmp(user, users) == 0){
+                fclose(fp);
+                get_learner_ip(user, ip);
+                if (!(7 <= strlen(ip) && strlen(ip) <= 15)) {
+                    system("cls");
+                    printf("Learner IP cannot be retrieved.\nExiting network chat...\n\n");
+                    return;
+                }
+
+                char str[512];
+                char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
+                system(sentence);
+                sprintf(str, ".\\chatwinver.exe %s", ip);      //needs learner IP to establish chat
+                system(str);
                 return;
             }
         }
-        printf("Invalid username\n");
-        get_ip(user, ip);
+        fclose(fp);
+        system("cls");
+        printf("Invalid username\nExiting network chat...\n\n");
+        return;
 
     }
     else {
         printf("Failed to access files...\n");
     }
-    fclose(fp);
+    
+}
+
+
+void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
+    char courses[100], users[MAX_USERNAME_LENGTH], issues[256], lines[512], tempIp[20], garbage[3], lastUser[MAX_USERNAME_LENGTH];
+    FILE* fp = fopen(ISSUE_FILE, "r");
+    if (fp) {
+        while (fgets(lines, sizeof(lines), fp)) {
+            sscanf(lines, "%[^,],%[^,],%[^,],%[^,],%[^\n]", garbage, users, courses, issues, tempIp);
+            if (strcmp(user, users) == 0){
+                strcpy(ip, tempIp);
+                strcpy(lastUser, users);
+            }
+        }
+        fclose(fp);
+        if (strcmp(user, lastUser) == 0) return;
+        system("cls");
+        printf("Invalid username\n\n");
+        return;
+
+    }
+    else {
+        printf("Failed to access files...\n\n");
+    }
 
 }
 
@@ -186,26 +248,11 @@ void mentor_entry() {
         getchar();
 
         switch (choice) {
-            case 1: view_issues(mentor_course); break;
-            case 2: add_comment(mentor_course); break;
-            case 3: {
-                //select learner like in manage_issues()
-                char user[MAX_USERNAME_LENGTH], ip[20];
-                view_issues(mentor_course);
-                printf("\nEnter the learner username you want to chat with: ");
-                scanf("%s", user);
-
-                get_learner_ip(user, ip);       //get learner ip for network chat
-
-                char str[512];
-                char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
-                system(sentence);
-                sprintf(str, ".\\chatwinver.exe %s", ip); 
-                system(str);
-                break;
-            }
-            case 4: printf("Returning to main menu...\n"); break;
-            default: printf("Invalid choice.\n");
+            case 1: system("cls"); view_issues(mentor_course); break;
+            case 2: system("cls"); add_comment(mentor_course, username); break;
+            case 3: system("cls"); learner_chat(mentor_course); break;
+            case 4: system("cls"); printf("Returning to main menu...\n"); break;
+            default: system("cls"); printf("Invalid choice.\n\n");
         }
     } while (choice != 4);
 }
@@ -229,6 +276,7 @@ int main() {
             printf("Exiting...\n");
             break;
         } else {
+            system("cls");
             printf("Invalid choice.\n");
         }
     }

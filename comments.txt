@@ -1,3 +1,3 @@
-wasif,CS,get better
-wasif,CS,nice
-wasif,MATH,b -> c
+7,username,CS,cs !,mentorUser
+8,username,CS,chat with me,mentorUser
+10,username,MATH,chat with me,M

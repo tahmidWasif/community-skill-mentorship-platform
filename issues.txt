@@ -1,7 +1,5 @@
-wasif,MATH,Cal II,127.0.0.1
-wasif,PHYS,PHYS 1443,127.0.0.1
-wasif,CS,a,127.0.0.1
-wasif,MATH,b,127.0.0.1
-wasif,CS,c,127.0.0.1
-m,CS,m,127.0.0.1
-newLearner,MATH,Polar coordinates,whatever
+7,username,CS,k,12.12.12.1
+8,username,CS,ksdf,ksdjf
+9,username,MATH,sdkjf,ksdjf
+10,username,MATH,polar coordinates,127.0.0.1
+11,username,CS,Terminal not working,127.0.0.1

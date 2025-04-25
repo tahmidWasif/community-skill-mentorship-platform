@@ -13,13 +13,18 @@
 #define LEARNER_FILE "learners.txt"
 #define MENTOR_FILE "mentors.txt"
 
-void manage_issues(const char *username);
 #define ISSUE_FILE "issues.txt"
 #define COMMENT_FILE "comments.txt"
 
 
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_USERNAME_LENGTH 50
+
+//function prototype
+void manage_issues(const char *username);
+void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]);
+void mentor_chat();
+void view_mentors();
 
 int validate_user(const char *username, const char *password) {     //check if username exists
     FILE *fp = fopen(LEARNER_FILE, "r");
@@ -38,14 +43,22 @@ int validate_user(const char *username, const char *password) {     //check if u
 
 void signup_user() {
     char username[50], password[50], ip[20];
-    FILE *fp = fopen(LEARNER_FILE, "a");
+    FILE *fp = fopen(LEARNER_FILE, "a+");
+    signUp:
     printf("Choose a username: ");
     scanf("%s", username);
+    //validate if username already exists
+    char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
+    rewind(fp);
+    while (fgets(line, sizeof(line), fp)) {
+        sscanf(line, "%[^,],%[^\n]", u, p);
+        if (strcmp(u, username) == 0) {
+            printf("\nUsername already exists.\n\n");
+            goto signUp;
+        }
+    }
     printf("Choose a password: ");
     getPassword(password);
-    printf("Enter IPv4 address: ");
-    fgets(ip, sizeof(ip), stdin);
-    ip[strlen(ip)-1] = '\0';        //removes newline character
 
     if (fp) {
         fprintf(fp, "%s,%s\n", username, password);
@@ -71,10 +84,17 @@ void submit_issue(const char *username) {
     set_color(15);
     scanf(" %[^\n]", ip);
     
-
-    FILE *fp = fopen(ISSUE_FILE, "a");
+    FILE *fp = fopen(ISSUE_FILE, "a+");
     if (fp) {
-        fprintf(fp, "%s,%s,%s,%s\n", username, course, issue, ip);       //ip address needs to be changed
+        char lines[512], user[MAX_USERNAME_LENGTH], readCourse[100], readIssue[256], readIp[20];
+        int usernameCount = 1, count;
+        while (fgets(lines, sizeof(lines), fp) != NULL){
+            sscanf(lines, "%d,%[^,],%[^,],%[^,],%[^\n]", &count, user, readCourse, readIssue, readIp);
+            if (strcmp(user, username) == 0){
+                usernameCount = count + 1;
+            }
+        }
+        fprintf(fp, "%d,%s,%s,%s,%s\n", usernameCount, username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
         set_color(10);
         printf("Issue submitted!\n");
@@ -94,13 +114,16 @@ void view_comments(const char *username) {
         return;
     }
 
-    char line[512], u[50], course[100], comment[256];
-    int found = 0;
-    printf("\n=== Comments for You ===\n");
+    char line[512], u[50], course[100], comment[256], mentorUsername[MAX_USERNAME_LENGTH];
+    int found = 0, id;
+    set_color(10);
+    printf("\n=== Comments for You ===\n\n");
+    set_color(15);
     while (fgets(line, sizeof(line), fp)) {
-        sscanf(line, "%[^,],%[^,],%[^\n]", u, course, comment);
+        sscanf(line, "%d,%[^,],%[^,],%[^,],%[^\n]", &id, u, course, comment, mentorUsername);
         if (strcmp(u, username) == 0) {
             printf("Course: %s\nComment: %s\n", course, comment);
+            printf("- %s\n\n", mentorUsername);
             found = 1;
         }
     }
@@ -111,26 +134,97 @@ void view_comments(const char *username) {
     fclose(fp);
     set_color(15);
 }
-void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
-    char courses[100], users[MAX_USERNAME_LENGTH], passwords[MAX_PASSWORD_LENGTH], lines[512];
+
+void mentor_chat(){
+    char ip[20], user[MAX_USERNAME_LENGTH];
+    
+    
+    //view mentor list according to Course
+    view_mentors();
+    //select mentor to chat with
+    printf("Enter Mentor username (0 to exit): ");
+    fgets(user, sizeof(user), stdin);
+    user[strcspn(user, "\n")] = '\0';   //removes \n
+
+    if (strcmp(user, "0") == 0){
+        printf("Exiting...\n");
+        return;
+    }
+
+    char courses[100], users[MAX_USERNAME_LENGTH], passwords[MAX_PASSWORD_LENGTH], lines[512], tempIp[20];
     FILE* fp = fopen(MENTOR_FILE, "r");
     if (fp) {
         while (fgets(lines, sizeof(lines), fp) != NULL) {
-            sscanf(lines, "%[^,],%[^,],%[^,],%s", users, passwords, courses, ip);
+            sscanf(lines, "%[^,],%[^,],%[^,],%[^\n]", users, passwords, courses, tempIp);
             if (strcmp(user, users) == 0){
+                fclose(fp);
+                get_mentor_ip(user, ip);
+                if (!(7 <= strlen(ip) && strlen(ip) <= 15)) {
+                    system("cls");
+                    printf("Mentor IP cannot be retrieved.\nExiting network chat...\n\n");
+                    return;
+                }
+
+                char str[512];
+                char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
+                system(sentence);
+                sprintf(str, ".\\chatwinver.exe %s", ip);      //needs mentor IP to establish chat
+                system(str);
                 return;
             }
         }
-        printf("Invalid username\n");
-        get_ip(user, ip);
+        fclose(fp);
+        system("cls");
+        printf("Invalid username\nExiting network chat...\n\n");
+        return;
 
     }
     else {
         printf("Failed to access files...\n");
     }
-    fclose(fp);
+    
+}
+
+void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
+    char courses[100], users[MAX_USERNAME_LENGTH], passwords[MAX_PASSWORD_LENGTH], lines[512], tempIp[20];
+    FILE* fp = fopen(MENTOR_FILE, "r");
+    if (fp) {
+        while (fgets(lines, sizeof(lines), fp) != NULL) {
+            sscanf(lines, "%[^,],%[^,],%[^,],%[^\n]", users, passwords, courses, tempIp);
+            if (strcmp(user, users) == 0){
+                strcpy(ip, tempIp);
+                fclose(fp);
+                return;
+            }
+        }
+        fclose(fp);
+        system("cls");
+        printf("Invalid username\n\n");
+        return;
+
+    }
+    else {
+        printf("Failed to access files...\n");
+    }
 
 }
+
+void view_mentors() {
+    system("cls");
+    FILE* fp = fopen(MENTOR_FILE, "r");
+    char line[512], user[MAX_USERNAME_LENGTH], garbage[MAX_PASSWORD_LENGTH], course[100], garbage2[20];
+    int count = 1;
+    set_color(5);
+    printf("\n=== Mentor List ===\n\n");
+    set_color(15);
+    while (fgets(line, sizeof(line), fp)) {
+        sscanf(line, "%[^,],%[^,],%[^,],%[^\n]", user, garbage, course, garbage2);
+        printf("%d.\nMentor username: %s\nCourse: %s\n\n", count++, user, course);
+    }
+
+    fclose(fp);
+}
+
 
 void learner_entry() {
     char username[50], password[50];
@@ -150,37 +244,28 @@ void learner_entry() {
         printf("\n=== Learner Menu ===\n");
         set_color(15);
         printf("1. Submit a Help Request\n");
-        printf("2. View Mentor Comments\n");
-        printf("3. Chat with Mentor\n");
-        printf("4. View/Delete My Issues\n");
-        printf("5. Return to Learner Access Menu\n");
+        printf("2. View Mentor List\n");
+        printf("3. View Mentor Comments\n");
+        printf("4. Chat with Mentor\n");
+        printf("5. View/Delete My Issues\n");
+        printf("6. Return to Learner Access Menu\n");
         printf("Choice: ");
         scanf("%d", &choice);
         getchar();
 
         switch (choice) {
-            case 1: submit_issue(username);
+            case 1: system("cls"); submit_issue(username); break;
+            case 2: system("cls"); view_mentors(); break;
+            case 3: system("cls"); view_comments(username); break;
+            case 4: system("cls"); mentor_chat(); break;
+            case 5: system("cls"); manage_issues(username); break;
+            case 6: system("cls"); printf("Returning to learner access menu...\n"); break;
+            default:
+                system("cls"); 
+                printf("Invalid choice.\n\n");
                 break;
-            case 2: view_comments(username); break;
-            case 3: {
-                char ip[20], user[MAX_USERNAME_LENGTH];
-
-
-                get_mentor_ip(user, ip);
-
-                char str[512];
-                char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
-                system(sentence);
-                sprintf(str, ".\\chatwinver.exe %s", ip);      //needs mentor IP
-                system(str);
-                break;
-            }
-            case 4: manage_issues(username); break;
-            case 5: printf("Returning to learner access menu...\n"); break;
-            printf("Returning to learner access menu...\n");
-            break;
         }
-    } while (choice != 5);
+    } while (choice != 6);
 }
 
 
@@ -193,10 +278,10 @@ void manage_issues(const char *username) {
 
     char lines[100][512];
     char users[100][50], courses[100][100], issues[100][256], ips[100][50];
-    int count = 0;
+    int count = 0, id[100];
 
     while (fgets(lines[count], sizeof(lines[count]), fp)) {
-        sscanf(lines[count], "%[^,],%[^,],%[^,],%s", users[count], courses[count], issues[count], ips[count]);
+        sscanf(lines[count], "%d,%[^,],%[^,],%[^,],%s", &id[count], users[count], courses[count], issues[count], ips[count]);
         if (strcmp(users[count], username) == 0) {
             count++;
         } 
@@ -219,13 +304,35 @@ void manage_issues(const char *username) {
     getchar();
 
     if (choice > 0 && choice <= count) {
-        FILE *wfp = fopen("temp_issues.txt", "w");
+        FILE* wfp = fopen("temp_issues.txt", "w");
+        int deleteId;
         for (int i = 0; i < count; i++) {
             if (i != choice - 1) {
                 fprintf(wfp, "%s", lines[i]);
             }
+            else {
+                deleteId = id[i];
+                printf("Comment ID: %d\n", deleteId);
+            }
+        }
+        FILE* cfp = fopen(COMMENT_FILE, "r");
+        char commentLine[512], commentUser[MAX_USERNAME_LENGTH], mentorUser[MAX_USERNAME_LENGTH], commentCourse[100], comment[512];
+        int commentId;
+        FILE* temp_cfp = fopen("temp_comments.txt", "w");
+        
+        while (fgets(commentLine, sizeof(commentLine), cfp)){
+            sscanf(commentLine, "%d,%[^,],%[^,],%[^,],%[^\n]", &commentId, commentUser, commentCourse, comment, mentorUser);
+            if (strcmp(commentUser, username) == 0 && commentId == deleteId) {
+                continue;
+            }
+            fprintf(temp_cfp, "%s", commentLine);
+            
         }
         fclose(wfp);
+        fclose(cfp);
+        fclose(temp_cfp);
+        remove(COMMENT_FILE);
+        rename("temp_comments.txt", COMMENT_FILE);
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
         printf("Issue deleted.\n");

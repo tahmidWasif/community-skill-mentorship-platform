@@ -26,7 +26,7 @@ if "%choice%"=="1" (
         pause
         exit /b
     )
-    learner.exe
+    call learner.exe
     goto menu
 ) else if "%choice%"=="3" (
     gcc mentor.c getPassword.c setColor.c -o mentor.exe -lws2_32
@@ -35,7 +35,7 @@ if "%choice%"=="1" (
         pause
         exit /b
     )
-    mentor.exe
+    call mentor.exe
     goto menu
 ) else if "%choice%"=="4" (
     echo Exiting...
