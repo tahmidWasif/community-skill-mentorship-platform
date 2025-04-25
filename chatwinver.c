@@ -1,12 +1,13 @@
 #ifdef _WIN32
+#include <ctype.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <conio.h>
 #endif
-#include <stdlib.h>          // EXIT_ codes
-#include <stdbool.h>         // bool
-#include <stdio.h>           // printf, scanf
-#include <string.h>          // strlen, strcmp
+#include <stdlib.h>          
+#include <stdbool.h>         
+#include <stdio.h>           
+#include <string.h>          
 
 
 
@@ -14,10 +15,6 @@
 
 #define LOCAL_PORT  5000     // port from which this program receives data
 #define REMOTE_PORT 5000     // port to which this program sends data
-
-//-----------------------------------------------------------------------------
-// Main
-//-----------------------------------------------------------------------------
 
 int main(int argc, char* argv[])
 {
@@ -49,8 +46,6 @@ int main(int argc, char* argv[])
     }
 
     // Open listener port
-    // TODO: Open local udp listener port
-    // TODO: Show an error and exit if the port cannot be opened
     bool openListener = openUdpListenerPort(REMOTE_PORT);
     {
         if (!openListener)
@@ -60,46 +55,51 @@ int main(int argc, char* argv[])
         }
     }
 
+    printf("\nOpening Network Chat. (Type 'quit' to end chat).\n\n");
     // Print heading so that sent and received messages are in different columns
-    printf("Sent\t\t\t\t\t\tReceived\n");
+    printf("Sent\t\t\t\t\t\t\t\t\t\t\tReceived\n");
     
     // Start chat loop until someone types a string starting with QUIT
     while(!quit)
     {
         // send string
-        // TODO: Add code:
         // if keyboard has been hit:
-        // - read a string from the keyboard and send
-        // - send the string to the remote port
-        // - leave while loop if a string starting with QUIT was sent
+        // read a string from the keyboard and send
+        // send the string to the remote port
+        // leave while loop if a string starting with QUIT was sent
         if (_kbhit())
         {
             fgets(str, 100, stdin);
             bool send = sendUdpData(remoteIp, REMOTE_PORT, str);
+            for (int i = 0; str[i] != '\0'; i++){
+                str[i] = toupper(str[i]);
+            }
             if (send){
-                if ((!(strncmp(str, "QUIT", 4)))||(!(strncmp(str, "quit", 4))))
+                if ((!(strncmp(str, "QUIT", 4))))
                 {
                     quit=true;
                 }
             }
         }
         // receive text
-        // TODO: Add code:
         // if data is received:
-        // - print to the right column
-        // - leave while loop if a string starting with QUIT is received
+        // print to the right column
+        // leave while loop if a string starting with QUIT is received
             bool receive = receiveUdpData(str, 100, 10);
             if (receive)
             {
-                printf("\t\t\t\t\t\t%s", str);
-                if ((!(strncmp(str, "QUIT", 4)))||(!(strncmp(str, "quit", 4))))
+                printf("\t\t\t\t\t\t\t\t\t\t\t%s", str);
+                for (int i = 0; str[i] != '\0'; i++){
+                    str[i] = toupper(str[i]);
+                }
+                if ((!(strncmp(str, "QUIT", 4))))
                 {
                     quit=true;
                 }
             }
     }
     printf("\nSession Terminated\n");
-    // TODO: Close udp listener port
+    // Closes udp listener port
     closeUdpListenerPort();
     #ifdef _WIN32
     WSACleanup();

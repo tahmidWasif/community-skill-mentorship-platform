@@ -14,18 +14,18 @@
 #define ISSUE_FILE "issues.txt"
 #define COMMENT_FILE "comments.txt"
 #define CHAT_LOG_FILE "chat_history.txt"
+#define MENTOR_FILE "mentors.txt"
 
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_USERNAME_LENGTH 50
 
 int validate_user(const char *username, const char *password, char *mentor_course) {
-    FILE *fp = fopen("users.txt", "r");
+    FILE *fp = fopen(MENTOR_FILE, "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
-    int role;
     while (fgets(line, sizeof(line), fp)) {
-        sscanf(line, "%[^,],%[^,],%d,%[^\n]", u, p, &role, mentor_course);
-        if (strcmp(u, username) == 0 && strcmp(p, password) == 0 && role == 1) {
+        sscanf(line, "%[^,],%[^,],%[^,]", u, p, mentor_course);
+        if (strcmp(u, username) == 0 && strcmp(p, password) == 0) {
             fclose(fp);
             return 1;
         }
@@ -35,22 +35,23 @@ int validate_user(const char *username, const char *password, char *mentor_cours
 }
 
 void signup_user() {
-    char username[50], password[50], course[100];
-    FILE *fp = fopen("users.txt", "a");
+    char username[50], password[50], course[100], ip[20];
+    FILE *fp = fopen(MENTOR_FILE, "a");
     printf("Choose a username: ");
-    scanf("%[^\n]", username);
+    scanf("%s", username);
     printf("Choose a password: ");
     getPassword(password);
     printf("Enter your IP address: ");
+    scanf("%s", ip);
     printf("Which course will you mentor?: ");
-    scanf(" %[^\n]", course);
+    scanf("%s", course);
     if (fp) {
-        fprintf(fp, "%s,%s,1,%s\n", username, password, course);
-        fclose(fp);
+        fprintf(fp, "%s,%s,%s,%s\n", username, password, course, ip);
         printf("Signup successful! Please log in.\n");
     } else {
         printf("Failed to register.\n");
     }
+    fclose(fp);
 }
 
 void view_issues(const char *mentor_course) {
@@ -78,7 +79,7 @@ void view_issues(const char *mentor_course) {
         if (token) strcpy(issue, token);
         token = strtok(NULL, ",");
         if (token) strcpy(ip, token);
-        ip[strcspn(ip, "\n")] = 0;
+        ip[strcspn(ip, "\n")] = '\0';
 
         char course_upper[100];
         strcpy(course_upper, course);
@@ -138,46 +139,25 @@ void add_comment(const char *mentor_course) {
     set_color(15);
 }
 
-void udp_chat(const char *learner_ip) {
-    WSADATA wsa;
-    SOCKET s;
-    struct sockaddr_in self, peer;
-    int slen = sizeof(peer);
-    char buf[512], message[512];
-    FILE *log = fopen(CHAT_LOG_FILE, "a");
+void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
+    char courses[100], users[MAX_USERNAME_LENGTH], issues[256], lines[512];
+    FILE* fp = fopen(ISSUE_FILE, "r");
+    if (fp) {
+        while (fgets(lines, sizeof(lines), fp) != NULL) {
+            sscanf(lines, "%[^,],%[^,],%[^,],%s", users, courses, issues, ip);
+            if (strcmp(user, users) == 0){
+                return;
+            }
+        }
+        printf("Invalid username\n");
+        get_ip(user, ip);
 
-    WSAStartup(MAKEWORD(2, 2), &wsa);
-    s = socket(AF_INET, SOCK_DGRAM, 0);
-
-    memset(&self, 0, sizeof(self));
-    self.sin_family = AF_INET;
-    self.sin_port = htons(8888);
-    self.sin_addr.s_addr = INADDR_ANY;
-    bind(s, (struct sockaddr *)&self, sizeof(self));
-
-    memset(&peer, 0, sizeof(peer));
-    peer.sin_family = AF_INET;
-    peer.sin_port = htons(8889);
-    peer.sin_addr.s_addr = inet_addr(learner_ip);
-
-    printf("[ UDP Chat - Type 'quit' to leave ]\n");
-
-    while (1) {
-        printf("You: ");
-        fgets(message, 512, stdin);
-        sendto(s, message, strlen(message), 0, (struct sockaddr *)&peer, slen);
-        if (log) fprintf(log, "Mentor: %s", message);
-        if (strncmp(message, "quit", 4) == 0) break;
-
-        int recv_len = recvfrom(s, buf, 512, 0, (struct sockaddr *)&peer, &slen);
-        buf[recv_len] = '\0';
-        printf("Learner: %s\n", buf);
-        if (log) fprintf(log, "Learner: %s\n", buf);
     }
+    else {
+        printf("Failed to access files...\n");
+    }
+    fclose(fp);
 
-    if (log) fclose(log);
-    closesocket(s);
-    WSACleanup();
 }
 
 void mentor_entry() {
@@ -210,14 +190,17 @@ void mentor_entry() {
             case 2: add_comment(mentor_course); break;
             case 3: {
                 //select learner like in manage_issues()
-                int user;
+                char user[MAX_USERNAME_LENGTH], ip[20];
                 view_issues(mentor_course);
-                printf("Enter the learner ID you want to chat with: ");
-                scanf("%d", &user);
+                printf("\nEnter the learner username you want to chat with: ");
+                scanf("%s", user);
+
+                get_learner_ip(user, ip);       //get learner ip for network chat
+
                 char str[512];
                 char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
                 system(sentence);
-                sprintf(str, ".\\chatwinver.exe %s", ""); //needs learner IP
+                sprintf(str, ".\\chatwinver.exe %s", ip); 
                 system(str);
                 break;
             }

@@ -10,22 +10,24 @@
 #pragma comment(lib, "ws2_32.lib")
 
 #define CHAT_LOG_FILE "chat_history.txt"
+#define LEARNER_FILE "learners.txt"
+#define MENTOR_FILE "mentors.txt"
 
 void manage_issues(const char *username);
 #define ISSUE_FILE "issues.txt"
 #define COMMENT_FILE "comments.txt"
 
+
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_USERNAME_LENGTH 50
 
 int validate_user(const char *username, const char *password) {     //check if username exists
-    FILE *fp = fopen("users.txt", "r");
+    FILE *fp = fopen(LEARNER_FILE, "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
-    int role;
     while (fgets(line, sizeof(line), fp)) {
-        sscanf(line, "%[^,],%[^,],%d", u, p, &role);
-        if (strcmp(u, username) == 0 && strcmp(p, password) == 0 && role == 2) {
+        sscanf(line, "%[^,],%[^\n]", u, p);
+        if (strcmp(u, username) == 0 && strcmp(p, password) == 0) {
             fclose(fp);
             return 1;
         }
@@ -36,7 +38,7 @@ int validate_user(const char *username, const char *password) {     //check if u
 
 void signup_user() {
     char username[50], password[50], ip[20];
-    FILE *fp = fopen("users.txt", "a");
+    FILE *fp = fopen(LEARNER_FILE, "a");
     printf("Choose a username: ");
     scanf("%s", username);
     printf("Choose a password: ");
@@ -46,7 +48,7 @@ void signup_user() {
     ip[strlen(ip)-1] = '\0';        //removes newline character
 
     if (fp) {
-        fprintf(fp, "%s,%s,2\n", username, password);
+        fprintf(fp, "%s,%s\n", username, password);
         fclose(fp);
         printf("Signup successful! Please log in.\n");
     } else {
@@ -109,6 +111,26 @@ void view_comments(const char *username) {
     fclose(fp);
     set_color(15);
 }
+void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
+    char courses[100], users[MAX_USERNAME_LENGTH], passwords[MAX_PASSWORD_LENGTH], lines[512];
+    FILE* fp = fopen(MENTOR_FILE, "r");
+    if (fp) {
+        while (fgets(lines, sizeof(lines), fp) != NULL) {
+            sscanf(lines, "%[^,],%[^,],%[^,],%s", users, passwords, courses, ip);
+            if (strcmp(user, users) == 0){
+                return;
+            }
+        }
+        printf("Invalid username\n");
+        get_ip(user, ip);
+
+    }
+    else {
+        printf("Failed to access files...\n");
+    }
+    fclose(fp);
+
+}
 
 void learner_entry() {
     char username[50], password[50];
@@ -137,13 +159,19 @@ void learner_entry() {
         getchar();
 
         switch (choice) {
-            case 1: submit_issue(username); break;
+            case 1: submit_issue(username);
+                break;
             case 2: view_comments(username); break;
             case 3: {
+                char ip[20], user[MAX_USERNAME_LENGTH];
+
+
+                get_mentor_ip(user, ip);
+
                 char str[512];
                 char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
                 system(sentence);
-                sprintf(str, ".\\chatwinver.exe %s", "127.0.0.1");
+                sprintf(str, ".\\chatwinver.exe %s", ip);      //needs mentor IP
                 system(str);
                 break;
             }
@@ -203,31 +231,6 @@ void manage_issues(const char *username) {
         printf("Issue deleted.\n");
     } else {
         printf("No issue deleted.\n");
-    }
-}
-
-void delete_user() {
-
-}
-
-
-void update_user() {
-    char username[50], password[50], ip[20];
-    FILE *fp = fopen("users.txt", "a");
-    printf("Choose a username: ");
-    scanf("%s", username);
-    printf("Choose a password: ");
-    getPassword(password);
-    printf("Enter IPv4 address: ");
-    fgets(ip, sizeof(ip), stdin);
-    ip[strlen(ip)-1] = '\0';        //removes newline character
-
-    if (fp) {
-        fprintf(fp, "%s,%s,2\n", username, password);
-        fclose(fp);
-        printf("Update successful! Please log in.\n");
-    } else {
-        printf("Failed to register.\n");
     }
 }
 

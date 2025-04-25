@@ -1,8 +1,0 @@
-wasif,pass,2
-wasif,pass,2
-k,pass,1,CS
-b,pass,1,MATH
-m,pass,2
-new,password,1,CS
-newUser,newPass,1,MATH
-newLearner,newPass,2

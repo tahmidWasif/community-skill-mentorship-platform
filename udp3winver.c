@@ -1,6 +1,3 @@
-// UDP3 Library - Windows Version
-// Converted for Winsock2
-
 #define _WIN32_WINNT 0x0600  // Enable newer Windows API (needed for inet_pton)
 
 #include <stdbool.h>
@@ -11,15 +8,7 @@
 
 #include "udp3winver.h"
 
-//-----------------------------------------------------------------------------
-// Local statics
-//-----------------------------------------------------------------------------
-
 static SOCKET listen_sockfd;
-
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
 
 bool sendUdpData(const char ipv4Address[], int port, const char str[])
 {
