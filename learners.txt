@@ -3,3 +3,4 @@ newL,pass
 newnew,pass
 newUser,pass
 wasif,pass
+learner2,pass
