@@ -7,3 +7,4 @@
 2,learner3,MATH,newcomment,M
 1,LEARNER4,MATH,no comments,M
 1,LEARNER4,MATH,d,M
+1,learner4,MATH,new comment,M
