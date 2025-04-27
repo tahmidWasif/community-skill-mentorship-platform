@@ -373,6 +373,8 @@ void manage_issues(const char *username) {
         rename("temp_comments.txt", COMMENT_FILE);
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
+        sleep(1);
+
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git commit -m \"Update comments.txt\" comments.txt");
         system("git push origin chat");
