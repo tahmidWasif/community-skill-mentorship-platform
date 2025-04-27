@@ -5,4 +5,3 @@
 12,username,CS,files,127.0.0.1
 13,username,CS,textfiles,127.0.0.1
 14,username,CS,files,127.0.0.1
-15,username,CS,git,127.0.0.1
