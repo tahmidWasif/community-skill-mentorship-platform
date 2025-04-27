@@ -14,8 +14,6 @@
 #define MAX_USERNAME_LENGTH 50
 
 void view_all_issues() {
-    system("git pull origin chat");
-    system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues submitted.\n");
@@ -46,6 +44,8 @@ void view_all_comments() {
 void server_menu() {
     int choice;
     do {
+        system("git pull origin chat");
+        system("cls");
         printf("\n=== Server Menu ===\n");
         printf("1. View All Issues\n");
         printf("2. View All Comments\n");
