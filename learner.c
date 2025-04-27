@@ -71,6 +71,7 @@ void signup_user() {
 
 void submit_issue(const char *username) {
     system("git pull origin chat");
+    system("cls");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -96,7 +97,7 @@ void submit_issue(const char *username) {
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git push origin chat");
-        
+        system("cls");
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
     } else {
@@ -284,6 +285,8 @@ void learner_entry() {
 
 
 void manage_issues(const char *username) {
+    system("git pull origin chat");
+    system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues found.\n");
@@ -348,6 +351,10 @@ void manage_issues(const char *username) {
         rename("temp_comments.txt", COMMENT_FILE);
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
+        system("git commit -m \"Update issues.txt\" issues.txt");
+        system("git commit -m \"Update comments.txt\" comments.txt");
+        system("git push origin chat");
+        system("cls");
         printf("Issue deleted.\n");
     } else {
         int c;
