@@ -1,5 +1,7 @@
 
 @echo off
+git pull origin chat
+cls
 :menu
 cls
 
