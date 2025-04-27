@@ -14,6 +14,8 @@
 #define MAX_USERNAME_LENGTH 50
 
 void view_all_issues() {
+    system("git pull origin chat");
+    system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues submitted.\n");

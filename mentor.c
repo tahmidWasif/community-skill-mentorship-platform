@@ -88,6 +88,7 @@ void view_issues(const char *mentor_course) {
     char line[512], username[50], course[100], issue[256], ip[20], id[3];
     int count = 1;
     char course_upper[100];
+    // course upper for display
     strcpy(course_upper, mentor_course);
     for (int j = 0; course_upper[j]; j++) {
         course_upper[j] = toupper(course_upper[j]);
@@ -97,10 +98,7 @@ void view_issues(const char *mentor_course) {
     while (fgets(line, sizeof(line), fp)) {
         sscanf(line, "%[^,],%[^,],%[^,],%[^,],%[^\n]", id, username, course, issue, ip);
 
-        char course_upper[100];
-        strcpy(course_upper, course);
-        for (int j = 0; course_upper[j]; j++) course_upper[j] = toupper(course_upper[j]);
-        if (strcmp(course_upper, mentor_course) != 0) continue;
+        if (_stricmp(course, mentor_course) != 0) continue;
         printf("\nIssue ID: %d\nLearner: %s\nCourse: %s\nIssue: %s\nIP: %s\n", count, username, course_upper, issue, ip);
         count++;
     }
@@ -140,7 +138,7 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
             fgets(comment, 256, stdin);
             comment[strcspn(comment, "\n")] = '\0';
 
-            for (int i = 0; course[i] != '\n'; i++){
+            for (int i = 0; course[i] != '\0'; i++){
                 course[i] = toupper(course[i]);
             }
             fprintf(cfp, "%d,%s,%s,%s,%s\n", id, username, course, comment, mentorUsername);
