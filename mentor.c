@@ -95,22 +95,12 @@ void view_issues(const char *mentor_course) {
 
     printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
     while (fgets(line, sizeof(line), fp)) {
-        char *token = strtok(line, ",");
-        if (token) strcpy(id, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(username, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(course, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(issue, token);
-        token = strtok(NULL, ",");
-        if (token) strcpy(ip, token);
-        ip[strcspn(ip, "\n")] = '\0';
+        sscanf(line, "%[^,],%[^,],%[^,],%[^,],%[^\n]", id, username, course, issue, ip);
 
         char course_upper[100];
         strcpy(course_upper, course);
         for (int j = 0; course_upper[j]; j++) course_upper[j] = toupper(course_upper[j]);
-        if (strcmp(course, mentor_course) != 0) continue;
+        if (strcmp(course_upper, mentor_course) != 0) continue;
         printf("\nIssue ID: %d\nLearner: %s\nCourse: %s\nIssue: %s\nIP: %s\n", count, username, course_upper, issue, ip);
         count++;
     }
@@ -126,7 +116,8 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
     int selected;
     printf("\nSelect an Issue ID to comment on: ");
     scanf("%d", &selected);
-    getchar();
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
 
     FILE *fp = fopen(ISSUE_FILE, "r");
     FILE *cfp = fopen(COMMENT_FILE, "a");
@@ -148,6 +139,10 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
             set_color(15);
             fgets(comment, 256, stdin);
             comment[strcspn(comment, "\n")] = '\0';
+
+            for (int i = 0; course[i] != '\n'; i++){
+                course[i] = toupper(course[i]);
+            }
             fprintf(cfp, "%d,%s,%s,%s,%s\n", id, username, course, comment, mentorUsername);
             set_color(10);
             printf("Comment added successfully!\n");
@@ -156,8 +151,6 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
         count++;
     }
     if (count != selected){
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
         system("cls");
         printf("\nInvalid choice\n\n");
     }
@@ -248,7 +241,7 @@ void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
 void mentor_entry() {
     system("git pull origin chat");
     //system("cls");
-    
+
     char username[50], password[50], mentor_course[100];
     printf("Username: ");
     scanf("%s", username);
