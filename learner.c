@@ -259,6 +259,9 @@ void view_mentors() {
 
 
 void learner_entry() {
+    system("git pull origin chat");
+    //system("cls");
+    
     char username[50], password[50];
     printf("Username: ");
     scanf("%s", username);

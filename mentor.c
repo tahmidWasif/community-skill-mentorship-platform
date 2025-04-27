@@ -39,6 +39,9 @@ int validate_user(const char *username, const char *password, char *mentor_cours
 }
 
 void signup_user() {
+    system("git pull origin chat");
+    //system("cls");
+
     char username[50], password[50], course[100], ip[20];
     FILE *fp = fopen(MENTOR_FILE, "a+");
     signUp:
@@ -68,9 +71,14 @@ void signup_user() {
         printf("Failed to register.\n");
     }
     fclose(fp);
+    system("git commit -m \"Update mentors.txt\" mentors.txt");
+    system("git push origin chat");
+    // system("cls");
 }
 
 void view_issues(const char *mentor_course) {
+    system("git pull origin chat");
+    //system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues found.\n");
@@ -84,7 +92,7 @@ void view_issues(const char *mentor_course) {
     for (int j = 0; course_upper[j]; j++) {
         course_upper[j] = toupper(course_upper[j]);
     }
-    
+
     printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
     while (fgets(line, sizeof(line), fp)) {
         char *token = strtok(line, ",");
@@ -111,6 +119,9 @@ void view_issues(const char *mentor_course) {
 }
 
 void add_comment(const char *mentor_course, const char* mentorUsername) {
+    system("git pull origin chat");
+    //system("cls");
+
     view_issues(mentor_course);
     int selected;
     printf("\nSelect an Issue ID to comment on: ");
@@ -152,6 +163,9 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
     }
     fclose(fp);
     fclose(cfp);
+    system("git commit -m \"Update comments.txt\" comments.txt");
+    system("git push origin chat");
+    //system("cls");
     set_color(BRIGHT_WHITE);
 }
 
@@ -232,6 +246,9 @@ void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
 }
 
 void mentor_entry() {
+    system("git pull origin chat");
+    //system("cls");
+    
     char username[50], password[50], mentor_course[100];
     printf("Username: ");
     scanf("%s", username);
@@ -254,6 +271,8 @@ void mentor_entry() {
         printf("4. Return to Main Menu\n");
         printf("Choice: ");
         scanf("%d", &choice);
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
 
         switch (choice) {
             case 1: system("cls"); view_issues(mentor_course); break;
@@ -261,8 +280,6 @@ void mentor_entry() {
             case 3: system("cls"); learner_chat(mentor_course); break;
             case 4: system("cls"); printf("Returning to main menu...\n"); break;
             default: 
-                int c;
-                while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
                 system("cls"); 
                 printf("Invalid choice.\n\n");
         }
@@ -278,6 +295,8 @@ int main() {
         printf("3. Exit\n");
         printf("Choice: ");
         scanf("%d", &choice);
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
 
         if (choice == 1) {
             signup_user();
@@ -287,8 +306,6 @@ int main() {
             printf("Exiting...\n");
             break;
         } else {
-            int c;
-            while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
             system("cls");
             printf("Invalid choice.\n");
         }
