@@ -42,6 +42,8 @@ int validate_user(const char *username, const char *password) {     //check if u
 }
 
 void signup_user() {
+    system("git pull origin chat");
+    //system("cls");
     char username[50], password[50], ip[20];
     FILE *fp = fopen(LEARNER_FILE, "a+");
     signUp:
@@ -63,6 +65,10 @@ void signup_user() {
     if (fp) {
         fprintf(fp, "%s,%s\n", username, password);
         fclose(fp);
+
+        system("git commit -m \"Update learners.txt\" learners.txt");
+        system("git push origin chat");
+        // system("cls");
         printf("Signup successful! Please log in.\n");
     } else {
         printf("Failed to register.\n");
@@ -286,7 +292,7 @@ void learner_entry() {
 
 void manage_issues(const char *username) {
     system("git pull origin chat");
-    system("cls");
+    // system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues found.\n");
@@ -354,7 +360,7 @@ void manage_issues(const char *username) {
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git commit -m \"Update comments.txt\" comments.txt");
         system("git push origin chat");
-        system("cls");
+        // system("cls");
         printf("Issue deleted.\n");
     } else {
         int c;
