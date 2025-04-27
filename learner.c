@@ -343,16 +343,27 @@ void manage_issues(const char *username) {
 
     if (choice > 0 && choice <= count) {
         FILE* wfp = fopen("temp_issues.txt", "w");
-        int deleteId;
-        for (int i = 0; i < count; i++) {
-            if (i != choice - 1) {
-                fprintf(wfp, "%s", lines[i]);
+        FILE* issues = fopen(ISSUE_FILE, "r");
+        char issueLine[512], issueUser[MAX_USERNAME_LENGTH], issueCourse[100], issueIssue[256], issueIp[20];
+        int issueId, deleteId;
+        while (fgets(issueLine, sizeof(issueLine), issues)){
+            sscanf(issueLine, "%d,%[^,],%[^,],%[^,],%[^\n]", &issueId, issueUser, issueIssue, issueIp);
+            if (strcmp(issueUser, username) == 0){
+                for (int i = 0; i < count; i++) {
+                    if (i != choice - 1) {
+                        fprintf(wfp, "%s", lines[i]);
+                    }
+                    else {
+                        deleteId = id[i];
+                        printf("Comment ID: %d\n", deleteId);
+                    }
+                }
             }
             else {
-                deleteId = id[i];
-                printf("Comment ID: %d\n", deleteId);
+                fprintf(wfp,"%s", issueLine);
             }
         }
+        fclose(issues);
         FILE* cfp = fopen(COMMENT_FILE, "r");
         char commentLine[512], commentUser[MAX_USERNAME_LENGTH], mentorUser[MAX_USERNAME_LENGTH], commentCourse[100], comment[512];
         int commentId;
