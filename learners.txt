@@ -5,3 +5,4 @@ newUser,pass
 wasif,pass
 learner2,pass
 learner3,pass
+learner4,1234
