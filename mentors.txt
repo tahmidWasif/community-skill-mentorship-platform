@@ -5,3 +5,4 @@ mathMentor,pass,MATH,1.2.3.4
 badIP,pass,CHEM,1212.1212.2323.3443
 newnewMentor,pass,CHEM,127.0.0.1
 ment,pass,PSY,127.0.0.1
+mint,pass,IE,12.23.34.45
