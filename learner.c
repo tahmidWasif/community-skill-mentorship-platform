@@ -340,6 +340,8 @@ void manage_issues(const char *username) {
     int choice;
     printf("Enter the issue number to delete it (or 0 to cancel): ");
     scanf("%d", &choice);
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
 
     if (choice > 0 && choice <= count) {
         FILE* wfp = fopen("temp_issues.txt", "w");
@@ -391,8 +393,6 @@ void manage_issues(const char *username) {
         // system("cls");
         printf("Issue deleted.\n");
     } else {
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
         printf("No issue deleted.\n");
     }
 }
