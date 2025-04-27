@@ -50,6 +50,7 @@ void signup_user() {
     while (fgets(line, sizeof(line), fp)) {
         sscanf(line, "%[^,],%[^\n]", u, p);
         if (strcmp(u, username) == 0) {
+            system("cls");
             printf("\nUsername already exists.\n\n");
             goto signUp;
         }
@@ -83,7 +84,7 @@ void view_issues(const char *mentor_course) {
     for (int j = 0; course_upper[j]; j++) {
         course_upper[j] = toupper(course_upper[j]);
     }
-    //needs changes for IP
+    
     printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
     while (fgets(line, sizeof(line), fp)) {
         char *token = strtok(line, ",");
@@ -143,9 +144,15 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
         }
         count++;
     }
+    if (count != selected){
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+        system("cls");
+        printf("\nInvalid choice\n\n");
+    }
     fclose(fp);
     fclose(cfp);
-    set_color(15);
+    set_color(BRIGHT_WHITE);
 }
 
 void learner_chat(const char* mentor_course){
@@ -154,7 +161,7 @@ void learner_chat(const char* mentor_course){
     //view mentor list according to Course
     view_issues(mentor_course);
     //select mentor to chat with
-    printf("Enter learner username (0 to exit): ");
+    printf("\nEnter learner username (0 to exit): ");
     fgets(user, sizeof(user), stdin);
     user[strcspn(user, "\n")] = '\0';   //removes \n
 
@@ -180,6 +187,8 @@ void learner_chat(const char* mentor_course){
                 char str[512];
                 char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
                 system(sentence);
+                system("cls");
+                printf("\nConnecting with learner: %s...\n", user);
                 sprintf(str, ".\\chatwinver.exe %s", ip);      //needs learner IP to establish chat
                 system(str);
                 return;
@@ -245,14 +254,17 @@ void mentor_entry() {
         printf("4. Return to Main Menu\n");
         printf("Choice: ");
         scanf("%d", &choice);
-        getchar();
 
         switch (choice) {
             case 1: system("cls"); view_issues(mentor_course); break;
             case 2: system("cls"); add_comment(mentor_course, username); break;
             case 3: system("cls"); learner_chat(mentor_course); break;
             case 4: system("cls"); printf("Returning to main menu...\n"); break;
-            default: system("cls"); printf("Invalid choice.\n\n");
+            default: 
+                int c;
+                while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+                system("cls"); 
+                printf("Invalid choice.\n\n");
         }
     } while (choice != 4);
 }
@@ -266,7 +278,6 @@ int main() {
         printf("3. Exit\n");
         printf("Choice: ");
         scanf("%d", &choice);
-        getchar();
 
         if (choice == 1) {
             signup_user();
@@ -276,6 +287,8 @@ int main() {
             printf("Exiting...\n");
             break;
         } else {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
             system("cls");
             printf("Invalid choice.\n");
         }

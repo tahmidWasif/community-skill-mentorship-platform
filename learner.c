@@ -71,17 +71,13 @@ void signup_user() {
 
 void submit_issue(const char *username) {
     char course[100], issue[256], ip[20];
-    set_color(11);
+    set_color(LIGHT_AQUA);
     printf("Enter course title: ");
-    set_color(15);
     scanf(" %[^\n]", course);
-    set_color(11);
     printf("Describe your issue: ");
-    set_color(15);
     scanf(" %[^\n]", issue);
-    set_color(11);
     printf("Enter your IP address: ");
-    set_color(15);
+    set_color(BRIGHT_WHITE);
     scanf(" %[^\n]", ip);
     
     FILE *fp = fopen(ISSUE_FILE, "a+");
@@ -96,43 +92,52 @@ void submit_issue(const char *username) {
         }
         fprintf(fp, "%d,%s,%s,%s,%s\n", usernameCount, username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
-        set_color(10);
-        printf("Issue submitted!\n");
+        set_color(LIGHT_GREEN);
+        printf("\nIssue submitted!\n");
     } else {
-        set_color(12);
-        printf("Failed to submit issue.\n");
+        set_color(LIGHT_RED);
+        printf("\nFailed to submit issue.\n");
     }
-    set_color(15);
+    set_color(BRIGHT_WHITE);
 }
 
 void view_comments(const char *username) {
     FILE *fp = fopen(COMMENT_FILE, "r");
     if (!fp) {
-        set_color(12);
+        set_color(LIGHT_RED);
         printf("No comments found.\n");
-        set_color(15);
+        set_color(BRIGHT_WHITE);
         return;
     }
 
     char line[512], u[50], course[100], comment[256], mentorUsername[MAX_USERNAME_LENGTH];
     int found = 0, id;
-    set_color(10);
+    set_color(LIGHT_AQUA);
     printf("\n=== Comments for You ===\n\n");
-    set_color(15);
     while (fgets(line, sizeof(line), fp)) {
         sscanf(line, "%d,%[^,],%[^,],%[^,],%[^\n]", &id, u, course, comment, mentorUsername);
         if (strcmp(u, username) == 0) {
-            printf("Course: %s\nComment: %s\n", course, comment);
-            printf("- %s\n\n", mentorUsername);
+            printf("Course: ");
+            set_color(BRIGHT_WHITE);
+            printf(" %s\n", course);
+            set_color(LIGHT_AQUA);
+            printf("Comment: ");
+            set_color(BRIGHT_WHITE);
+            printf("%s\n", comment);
+            set_color(LIGHT_AQUA);
+            printf("From: ");
+            set_color(GRAY);
+            printf("%s\n\n", mentorUsername);
             found = 1;
+            set_color(LIGHT_AQUA);
         }
     }
     if (!found) {
-        set_color(14);
+        set_color(LIGHT_RED);
         printf("No mentor comments found for your submissions.\n");
     }
     fclose(fp);
-    set_color(15);
+    set_color(BRIGHT_WHITE);
 }
 
 void mentor_chat(){
@@ -168,6 +173,8 @@ void mentor_chat(){
                 char str[512];
                 char sentence[]="gcc -std=gnu11 -Wall -o chatwinver.exe chatwinver.c udp3winver.c -lws2_32";
                 system(sentence);
+                system("cls");
+                printf("\nConnecting with mentor: %s...\n", user);
                 sprintf(str, ".\\chatwinver.exe %s", ip);      //needs mentor IP to establish chat
                 system(str);
                 return;
@@ -251,7 +258,6 @@ void learner_entry() {
         printf("6. Return to Learner Access Menu\n");
         printf("Choice: ");
         scanf("%d", &choice);
-        getchar();
 
         switch (choice) {
             case 1: system("cls"); submit_issue(username); break;
@@ -261,10 +267,13 @@ void learner_entry() {
             case 5: system("cls"); manage_issues(username); break;
             case 6: system("cls"); printf("Returning to learner access menu...\n"); break;
             default:
-                system("cls"); 
-                printf("Invalid choice.\n\n");
-                break;
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+            system("cls");
+            printf("Invalid choice.\n\n");
+            break;
         }
+
     } while (choice != 6);
 }
 
@@ -301,7 +310,6 @@ void manage_issues(const char *username) {
     int choice;
     printf("Enter the issue number to delete it (or 0 to cancel): ");
     scanf("%d", &choice);
-    getchar();
 
     if (choice > 0 && choice <= count) {
         FILE* wfp = fopen("temp_issues.txt", "w");
@@ -337,6 +345,8 @@ void manage_issues(const char *username) {
         rename("temp_issues.txt", ISSUE_FILE);
         printf("Issue deleted.\n");
     } else {
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
         printf("No issue deleted.\n");
     }
 }
@@ -350,7 +360,6 @@ int main() {
         printf("3. Exit\n");
         printf("Choice: ");
         scanf("%d", &choice);
-        getchar();
 
         if (choice == 1) {
             signup_user();
@@ -360,6 +369,9 @@ int main() {
             printf("Exiting...\n");
             break;
         } else {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+            system("cls");
             printf("Invalid choice.\n");
         }
     }

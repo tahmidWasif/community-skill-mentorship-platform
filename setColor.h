@@ -1,6 +1,10 @@
 #ifndef SETCOLOR_H
 #define SETCOLOR_H
 
+enum color {
+    BLACK, BLUE, GREEN, CYAN, RED, PURPLE, YELLOW, WHITE, GRAY, LIGHT_BLUE, LIGHT_GREEN, LIGHT_AQUA, LIGHT_RED, LIGHT_PURPLE, LIGHT_YELLOW, BRIGHT_WHITE
+};
+
 void set_color(int color);
 
 #endif

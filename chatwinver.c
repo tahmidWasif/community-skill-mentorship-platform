@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     }
     #endif
     char* remoteIp;
-    char str[100];
+    char str[101];
     bool quit = false;
 
     // Verify arguments are good
@@ -55,13 +55,18 @@ int main(int argc, char* argv[])
         }
     }
 
-    printf("\nOpening Network Chat. (Type 'quit' to end chat).\n\n");
+    printf("\nNetwork Chat Established (Max character length: 100).\n(Type 'quit' to end chat).\n\n");
     // Print heading so that sent and received messages are in different columns
     printf("Sent\t\t\t\t\t\t\t\t\t\t\tReceived\n\n");
     
     // Start chat loop until someone types a string starting with QUIT
+    int p = 0;
     while(!quit)
     {
+        if (p == 0){
+            printf("> ");
+        }
+        p = 1;
         // send string
         // if keyboard has been hit:
         // read a string from the keyboard and send
@@ -69,8 +74,24 @@ int main(int argc, char* argv[])
         // leave while loop if a string starting with QUIT was sent
         if (_kbhit())
         {
-            fgets(str, 100, stdin);
+
+            while (1){      //validating input length
+                fgets(str, 101, stdin);
+                
+                if (strlen(str) <= 99) {
+                    break;
+                }
+                else {
+                    printf("\nInput too long. Max limit: 100 characters\n\n> ");
+                    int c;
+                    // clears input buffer
+                    while ((c = getchar()) != '\n' && c != EOF);
+                    
+                }
+            }
             bool send = sendUdpData(remoteIp, REMOTE_PORT, str);
+            
+            // turns each character of str to uppercase to compare with QUIT
             for (int i = 0; str[i] != '\0'; i++){
                 str[i] = toupper(str[i]);
             }
@@ -80,6 +101,7 @@ int main(int argc, char* argv[])
                     quit=true;
                 }
             }
+            p--;
         }
         // receive text
         // if data is received:
@@ -88,7 +110,7 @@ int main(int argc, char* argv[])
             bool receive = receiveUdpData(str, 100, 10);
             if (receive)
             {
-                printf("\t\t\t\t\t\t\t\t\t\t\t%s", str);
+                printf("\t\t\t\t\t\t\t\t\t\t\t> %s", str);
                 for (int i = 0; str[i] != '\0'; i++){
                     str[i] = toupper(str[i]);
                 }
