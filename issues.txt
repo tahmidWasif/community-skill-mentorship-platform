@@ -1,4 +1,3 @@
-7,username,CS,k,12.12.12.1
 8,username,CS,ksdf,ksdjf
 9,username,MATH,sdkjf,ksdjf
 10,username,MATH,polar coordinates,127.0.0.1
