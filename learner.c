@@ -70,6 +70,7 @@ void signup_user() {
 }
 
 void submit_issue(const char *username) {
+    system("git pull origin chat");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -92,6 +93,10 @@ void submit_issue(const char *username) {
         }
         fprintf(fp, "%d,%s,%s,%s,%s\n", usernameCount, username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
+        // updating file to server
+        system("git commit -m \"Update issues.txt\" issues.txt");
+        system("git push origin chat");
+        
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
     } else {
@@ -217,7 +222,7 @@ void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
 }
 
 void view_mentors() {
-    system("cls");
+    // system("cls");
     FILE* fp = fopen(MENTOR_FILE, "r");
     char line[512], user[MAX_USERNAME_LENGTH], garbage[MAX_PASSWORD_LENGTH], course[100], garbage2[20];
     int count = 1;
@@ -269,7 +274,7 @@ void learner_entry() {
             default:
             int c;
             while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
-            system("cls");
+            // system("cls");
             printf("Invalid choice.\n\n");
             break;
         }
