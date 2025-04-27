@@ -8,3 +8,4 @@
 1,wasif,MATH,polar,127.0.0.1
 1,learner3,math,scantron,127.0.0.1
 2,learner3,MATH,skill,127.0.0.1
+3,learner3,CS,case sensitivity,127.0.0.1
