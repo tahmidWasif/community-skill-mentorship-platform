@@ -185,6 +185,7 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
         system("cls");
         set_color(LIGHT_RED);
         printf("\nInvalid choice\n\n");
+        Sleep(1500);
     }
     fclose(fp);
     fclose(cfp);
