@@ -314,9 +314,8 @@ void learner_entry() {
 
     int choice;
     do {
-        set_color(3);
+        set_color(LIGHT_AQUA);
         printf("\n=== Learner Menu ===\n");
-        set_color(15);
         printf("1. Submit a Help Request\n");
         printf("2. View Mentor List\n");
         printf("3. View Mentor Comments\n");
@@ -324,9 +323,10 @@ void learner_entry() {
         printf("5. View/Delete My Issues\n");
         printf("6. Return to Learner Access Menu\n");
         printf("Enter your choice: ");
+        set_color(BRIGHT_WHITE);
         choice = getValidatedInteger();
         
-        // system("cls");
+        system("cls");
 
         switch (choice) {
             case 1: system("cls"); submit_issue(username); break;
@@ -344,6 +344,7 @@ void learner_entry() {
                 system("cls"); 
                 break;
             default:
+            set_color(LIGHT_RED);
             printf("Invalid choice.\n\n");
             break;
         }
@@ -353,8 +354,12 @@ void learner_entry() {
 
 
 void manage_issues(const char *username) {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    // system("cls");
+    system("cls");
+    set_color(BRIGHT_WHITE);
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues found.\n");
@@ -384,8 +389,10 @@ void manage_issues(const char *username) {
     }
 
     int choice;
+    set_color(LIGHT_AQUA);
     printf("\n=== Select an Issue ID to delete (0 to cancel) ===\n\n");
     printf("Enter your choice: ");
+    set_color(BRIGHT_WHITE);
     choice = getValidatedInteger();
 
     if (choice > 0 && choice <= count) {
@@ -431,31 +438,40 @@ void manage_issues(const char *username) {
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
 
+        set_color(LIGHT_YELLOW);
+        printf("Loading...\n");
+        set_color(BLACK);
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git commit -m \"Update comments.txt\" comments.txt");
         system("git push origin newChatRecovery");
-        //system("cls");
+        system("cls");
+        set_color(LIGHT_GREEN);
         printf("Issue deleted.\n");
     } 
     else if (choice == 0) {
+        set_color(LIGHT_RED);
         printf("No issue deleted.\n");
     }
     else {
+        set_color(RED);
         printf("Invalid Input.\n");
     }
+    set_color(BRIGHT_WHITE);
 }
 
 int mainLearner() {
     int choice;
     while (1) {
+        set_color(LIGHT_AQUA);
         printf("\n=== Learner Access ===\n\n");
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");
         printf("Enter your choice: ");
+        set_color(BRIGHT_WHITE);
         choice = getValidatedInteger();
 
-        // system("cls");
+        system("cls");
 
         if (choice == 1) {
             signup_learner();
@@ -471,6 +487,7 @@ int mainLearner() {
             system("cls");
             break;
         } else {
+            set_color(LIGHT_RED);
             printf("Invalid choice.\n");
         }
     }

@@ -41,13 +41,18 @@ int validate_mentor(const char *username, const char *password, char *mentor_cou
 }
 
 void signup_mentor() {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
+    system("cls");
 
     char username[50], password[50], course[100], ip[20];
     FILE *fp = fopen(MENTOR_FILE, "a+");
     signUp:
+    set_color(PURPLE);
     printf("Choose a username: ");
+    set_color(BRIGHT_WHITE);
     scanf("%s", username);
     //validate if username already exists
     char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
@@ -56,33 +61,51 @@ void signup_mentor() {
         sscanf(line, "%[^,],%[^\n]", u, p);
         if (strcmp(u, username) == 0) {
             system("cls");
+            set_color(LIGHT_RED);
             printf("\nUsername already exists.\n\n");
             goto signUp;
         }
     }
+    set_color(PURPLE);
     printf("Choose a password: ");
+    set_color(BRIGHT_WHITE);
     getPassword(password);
+    set_color(PURPLE);
     printf("Enter your IP address: ");
+    set_color(BRIGHT_WHITE);
     scanf("%s", ip);
+    set_color(PURPLE);
     printf("Which course will you mentor?: ");
+    set_color(BRIGHT_WHITE);
     scanf("%s", course);
     if (fp) {
         fprintf(fp, "%s,%s,%s,%s\n", username, password, course, ip);
+        set_color(LIGHT_GREEN);
         printf("Signup successful! Please log in.\n");
     } else {
+        set_color(LIGHT_RED);
         printf("Failed to register.\n");
     }
     fclose(fp);
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git commit -m \"Update mentors.txt\" mentors.txt");
     system("git push origin newChatRecovery");
-    // system("cls");
+    system("cls");
+    set_color(BRIGHT_WHITE);
 }
 
 void view_issues(const char *mentor_course) {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
+    system("cls");
+    set_color(BRIGHT_WHITE);
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
+        set_color(LIGHT_RED);
         printf("No issues found.\n");
         return;
     }
@@ -96,7 +119,9 @@ void view_issues(const char *mentor_course) {
         course_upper[j] = toupper(course_upper[j]);
     }
 
+    set_color(PURPLE);
     printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
+    set_color(BRIGHT_WHITE);
     while (fgets(line, sizeof(line), fp)) {
         sscanf(line, "%[^,],%[^,],%[^,],%[^,],%[^\n]", id, username, course, issue, ip);
 
@@ -105,22 +130,28 @@ void view_issues(const char *mentor_course) {
         count++;
     }
     fclose(fp);
-    set_color(15);
+    set_color(BRIGHT_WHITE);
 }
 
 void add_comment(const char *mentor_course, const char* mentorUsername) {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
+    system("cls");
 
     view_issues(mentor_course);
     int selected;
+    set_color(PURPLE);
     printf("\n=== Select an Issue ID to comment on ===\n\n ");
     printf("Enter your choice: ");
+    set_color(BRIGHT_WHITE);
     selected = getValidatedInteger();
 
     FILE *fp = fopen(ISSUE_FILE, "r");
     FILE *cfp = fopen(COMMENT_FILE, "a");
     if (!fp || !cfp) {
+        set_color(LIGHT_RED);
         printf("Failed to access files.\n");
         return;
     }
@@ -133,9 +164,9 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
         if (_stricmp(course, mentor_course) != 0) continue;
         if (count == selected) {
             char comment[256];
-            set_color(11);
+            set_color(PURPLE);
             printf("Enter your comment: ");
-            set_color(15);
+            set_color(BRIGHT_WHITE);
             fgets(comment, 256, stdin);
             comment[strcspn(comment, "\n")] = '\0';
 
@@ -143,7 +174,7 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
                 course[i] = toupper(course[i]);
             }
             fprintf(cfp, "%d,%s,%s,%s,%s\n", id, username, course, comment, mentorUsername);
-            set_color(10);
+            set_color(LIGHT_GREEN);
             printf("Comment added successfully!\n");
             break;
         }
@@ -151,13 +182,18 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
     }
     if (count != selected){
         system("cls");
+        set_color(LIGHT_RED);
         printf("\nInvalid choice\n\n");
     }
     fclose(fp);
     fclose(cfp);
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git commit -m \"Update comments.txt\" comments.txt");
     system("git push origin newChatRecovery");
-    //system("cls");
+    system("cls");
+
     set_color(BRIGHT_WHITE);
 }
 
@@ -167,7 +203,9 @@ void learner_chat(const char* mentor_course){
     //view mentor list according to Course
     view_issues(mentor_course);
     //select mentor to chat with
+    set_color(PURPLE);
     printf("\nEnter learner username (0 to exit): ");
+    set_color(BRIGHT_WHITE);
     fgets(user, sizeof(user), stdin);
     user[strcspn(user, "\n")] = '\0';   //removes \n
 
@@ -186,7 +224,10 @@ void learner_chat(const char* mentor_course){
                 get_learner_ip(user, ip);
                 if (!(7 <= strlen(ip) && strlen(ip) <= 15)) {
                     system("cls");
-                    printf("Learner IP cannot be retrieved.\nExiting network chat...\n\n");
+                    set_color(LIGHT_RED);
+                    printf("Learner IP cannot be retrieved.\n");
+                    set_color(BRIGHT_WHITE);
+                    printf("Exiting network chat...\n\n");
                     return;
                 }
 
@@ -202,11 +243,15 @@ void learner_chat(const char* mentor_course){
         }
         fclose(fp);
         system("cls");
-        printf("Invalid username\nExiting network chat...\n\n");
+        set_color(LIGHT_RED);
+        printf("Invalid username\n");
+        set_color(BRIGHT_WHITE);
+        printf("Exiting network chat...\n\n");
         return;
 
     }
     else {
+        set_color(LIGHT_RED);
         printf("Failed to access files...\n");
     }
     
@@ -227,41 +272,50 @@ void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
         fclose(fp);
         if (strcmp(user, lastUser) == 0) return;
         system("cls");
+        set_color(LIGHT_RED);
         printf("Invalid username\n\n");
         return;
-
+        
     }
     else {
+        set_color(LIGHT_RED);
         printf("Failed to access files...\n\n");
     }
 
 }
 
 void mentor_entry() {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
-
+    system("cls");
     char username[50], password[50], mentor_course[100];
+    set_color(PURPLE);
     printf("Username: ");
+    set_color(BRIGHT_WHITE);
     scanf("%s", username);
+    set_color(PURPLE);
     printf("Password: ");
+    set_color(BRIGHT_WHITE);
     getPassword(password);
 
     if (!validate_mentor(username, password, mentor_course)) {
+        set_color(LIGHT_RED);
         printf("Invalid credentials or not a mentor.\n");
         return;
     }
 
     int choice;
     do {
-        set_color(14);
+        set_color(PURPLE);
         printf("\n=== Mentor Menu ===\n");
-        set_color(15);
         printf("1. View Learner Issues\n");
         printf("2. Comment on an Issue\n");
         printf("3. Chat with Learner\n");
         printf("4. Return to Main Menu\n");
         printf("Enter your choice: ");
+        set_color(BRIGHT_WHITE);
         choice = getValidatedInteger();
 
         switch (choice) {
@@ -279,6 +333,7 @@ void mentor_entry() {
                 break;
             default: 
                 system("cls"); 
+                set_color(LIGHT_RED);
                 printf("Invalid choice.\n\n");
         }
     } while (choice != 4);
@@ -287,11 +342,13 @@ void mentor_entry() {
 int mainMentor() {
     int choice;
     while (1) {
+        set_color(PURPLE);
         printf("\n=== Mentor Access ===\n");
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");
         printf("Enter your choice: ");
+        set_color(BRIGHT_WHITE);
         choice = getValidatedInteger();
 
         if (choice == 1) {
@@ -309,6 +366,7 @@ int mainMentor() {
             break;
         } else {
             system("cls");
+            set_color(LIGHT_RED);
             printf("Invalid choice.\n");
         }
     }
