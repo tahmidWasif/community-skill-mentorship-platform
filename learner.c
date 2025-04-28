@@ -485,6 +485,7 @@ int mainLearner() {
             system("cls");
             learner_entry();
         } else if (choice == 3) {
+            set_color(LIGHT_YELLOW);
             printf("\nExiting");
             for (int i = 0; i < 3; i++){
                 Sleep(300);

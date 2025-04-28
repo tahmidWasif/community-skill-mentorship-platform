@@ -53,7 +53,8 @@ void signup_mentor() {
     set_color(PURPLE);
     printf("Choose a username: ");
     set_color(BRIGHT_WHITE);
-    scanf("%s", username);
+    fgets(username, sizeof(username), stdin);
+    username[strcspn(username, "\n")] = '\0';
     //validate if username already exists
     char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
     rewind(fp);
@@ -73,11 +74,13 @@ void signup_mentor() {
     set_color(PURPLE);
     printf("Enter your IP address: ");
     set_color(BRIGHT_WHITE);
-    scanf("%s", ip);
+    fgets(ip,sizeof(ip),stdin);
+    ip[strcspn(ip, "\n")] = '\0';
     set_color(PURPLE);
     printf("Which course will you mentor?: ");
     set_color(BRIGHT_WHITE);
-    scanf("%s", course);
+    fgets(course,sizeof(course),stdin);
+    course[strcspn(course, "\n")] = '\0';
     if (fp) {
         fprintf(fp, "%s,%s,%s,%s\n", username, password, course, ip);
         set_color(LIGHT_GREEN);
@@ -360,7 +363,8 @@ int mainMentor() {
             system("cls");
             mentor_entry();
         } else if (choice == 3) {
-            printf("Exiting");
+            set_color(LIGHT_YELLOW);
+            printf("\nExiting");
             for (int i = 0; i < 3; i++){
                 Sleep(300);
                 printf(".");
