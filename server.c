@@ -17,7 +17,7 @@
 #define MAX_USERNAME_LENGTH 50
 
 void view_all_issues() {
-    system("git pull origin chat");
+    system("git pull origin newChatRecovery");
     system("cls");
 
     FILE *fp = fopen(ISSUE_FILE, "r");
@@ -34,7 +34,7 @@ void view_all_issues() {
 }
 
 void view_all_comments() {
-    system("git pull origin chat");
+    system("git pull origin newChatRecovery");
     system("cls");
     
     FILE *fp = fopen(COMMENT_FILE, "r");
