@@ -302,13 +302,20 @@ void learner_entry() {
     set_color(BRIGHT_WHITE);
     
     char username[50], password[50];
+    set_color(LIGHT_AQUA);
     printf("Username: ");
+    set_color(BRIGHT_WHITE);
     scanf("%s", username);
+    set_color(LIGHT_AQUA);
     printf("Password: ");
+    set_color(BRIGHT_WHITE);
     getPassword(password);
 
     if (!validate_learner(username, password)) {
-        printf("Invalid credentials or not a learner.\n");
+        set_color(LIGHT_RED);
+        printf("\nInvalid credentials or not a learner.\n");
+        Sleep(1500);
+        system("cls");
         return;
     }
 
