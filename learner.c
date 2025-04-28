@@ -460,6 +460,8 @@ void manage_issues(const char *username) {
     else {
         set_color(RED);
         printf("Invalid Input.\n");
+        Sleep(1500);
+        system("cls");
     }
     set_color(BRIGHT_WHITE);
 }
