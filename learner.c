@@ -116,8 +116,10 @@ void submit_issue(const char *username) {
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
         if (!safeGitPush()) {
-            remove(ISSUE_FILE);
+            system("git restore issues.txt");
             system("git commit -m \"Update issues.txt\" issues.txt");
+            system("git pull origin chat");
+            //system("cls");
             return;
         }
         
