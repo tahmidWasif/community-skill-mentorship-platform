@@ -127,7 +127,7 @@ void submit_issue(const char *username) {
                 usernameCount = count + 1;
             }
         }
-        fprintf(fp, "%d,%s,%s,%s,%s", usernameCount, username, course, issue, ip);       //ip address needs to be changed
+        fprintf(fp, "%d,%s,%s,%s,%s\n", usernameCount, username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
         // updating file to server
         set_color(LIGHT_YELLOW);
