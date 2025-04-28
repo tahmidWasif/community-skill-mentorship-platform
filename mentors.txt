@@ -16,3 +16,4 @@ new,pass,CS,1.1.1.1
 newnewnewnw,k,phys,2.2.2.2
 new2,pass,CS,10.234.53.196
 mentorCS,pass,CS,172.20.10.5
+Sarker,pass,CS,172.20.10.7
