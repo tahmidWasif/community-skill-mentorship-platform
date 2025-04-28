@@ -11,3 +11,4 @@ tor,k,m,k
 tahsinmoga,tahsinmoga,MATH,172.20.10.6
 mentor,mentor,MATH,192.168.1.220
 k,pass,CS,kde
+goodusername,pass,math,1.1.1.1
