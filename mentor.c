@@ -26,6 +26,7 @@ void get_learner_ip(char [], char []);
 void learner_chat();
 
 int validate_mentor(const char *username, const char *password, char *mentor_course) {
+    system("git pull origin liveDB");
     FILE *fp = fopen(MENTOR_FILE, "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
@@ -76,9 +77,9 @@ void signup_mentor() {
     system("git commit -m \"Update mentors.txt\" mentors.txt");
     if (!safeGitPush()) {
         remove(MENTOR_FILE);
-        system("git commit -am \"removing learners.txt\"");
+        system("git commit -am \"removing mentors.txt\"");
         system("git pull origin liveDB");
-        system("git add learners.txt");
+        system("git add mentors.txt");
         system("git commit -am \"Resolving merge conflict\"");
         //system("cls");
         return;
@@ -164,10 +165,10 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
     fclose(cfp);
     system("git commit -m \"Update comments.txt\" comments.txt");
     if (!safeGitPush()) {
-        remove(LEARNER_FILE);
-        system("git commit -am \"removing learners.txt\"");
+        remove(COMMENT_FILE);
+        system("git commit -am \"removing comments.txt\"");
         system("git pull origin liveDB");
-        system("git add learners.txt");
+        system("git add comments.txt");
         system("git commit -am \"Resolving merge conflict\"");
         //system("cls");
         return;
@@ -177,6 +178,7 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
 }
 
 void learner_chat(const char* mentor_course){
+    system("git pull origin liveDB");
     char ip[20], user[MAX_USERNAME_LENGTH];
     
     //view mentor list according to Course
@@ -229,6 +231,7 @@ void learner_chat(const char* mentor_course){
 
 
 void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
+    system("git pull origin liveDB");
     char courses[100], users[MAX_USERNAME_LENGTH], issues[256], lines[512], tempIp[20], garbage[3], lastUser[MAX_USERNAME_LENGTH];
     FILE* fp = fopen(ISSUE_FILE, "r");
     if (fp) {
@@ -300,6 +303,7 @@ void mentor_entry() {
 }
 
 int mainMentor() {
+    system("git pull origin liveDB");
     int choice;
     while (1) {
         printf("\n=== Mentor Access ===\n");

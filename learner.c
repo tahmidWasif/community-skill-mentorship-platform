@@ -30,7 +30,8 @@ void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]);
 void mentor_chat();
 void view_mentors();
 
-int validate_learner(const char *username, const char *password) {     //check if username exists
+int validate_learner(const char *username, const char *password) { 
+    system("git pull origin liveDB");    //check if username exists
     FILE *fp = fopen(LEARNER_FILE, "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
@@ -188,6 +189,7 @@ void view_comments(const char *username) {
 }
 
 void mentor_chat(){
+    system("git pull origin liveDB"); 
     char ip[20], user[MAX_USERNAME_LENGTH];
     
     
@@ -240,6 +242,7 @@ void mentor_chat(){
 }
 
 void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
+    system("git pull origin liveDB"); 
     char courses[100], users[MAX_USERNAME_LENGTH], passwords[MAX_PASSWORD_LENGTH], lines[512], tempIp[20];
     FILE* fp = fopen(MENTOR_FILE, "r");
     if (fp) {
@@ -430,6 +433,7 @@ void manage_issues(const char *username) {
 int mainLearner() {
     int choice;
     while (1) {
+        system("git pull origin liveDB"); 
         printf("\n=== Learner Access ===\n\n");
         printf("1. Sign Up\n");
         printf("2. Log In\n");
