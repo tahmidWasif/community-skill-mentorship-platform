@@ -1,6 +1,7 @@
 #include "mentor.h"
 #include "getPassword.h"
 #include "setColor.h"
+#include "validateInput.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -113,10 +114,9 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
 
     view_issues(mentor_course);
     int selected;
-    printf("\nSelect an Issue ID to comment on: ");
-    scanf("%d", &selected);
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+    printf("\n=== Select an Issue ID to comment on ===\n\n ");
+    printf("Enter your choice: ");
+    selected = getValidatedInteger();
 
     FILE *fp = fopen(ISSUE_FILE, "r");
     FILE *cfp = fopen(COMMENT_FILE, "a");
@@ -261,16 +261,22 @@ void mentor_entry() {
         printf("2. Comment on an Issue\n");
         printf("3. Chat with Learner\n");
         printf("4. Return to Main Menu\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+        printf("Enter your choice: ");
+        choice = getValidatedInteger();
 
         switch (choice) {
             case 1: system("cls"); view_issues(mentor_course); break;
             case 2: system("cls"); add_comment(mentor_course, username); break;
             case 3: system("cls"); learner_chat(mentor_course); break;
-            case 4: system("cls"); printf("Returning to main menu...\n"); break;
+            case 4: 
+                printf("\nReturning to main menu"); 
+                for (int i = 0; i < 3; i++){
+                    Sleep(300);
+                    printf(".");
+                }
+                Sleep(300);
+                system("cls");
+                break;
             default: 
                 system("cls"); 
                 printf("Invalid choice.\n\n");
@@ -285,17 +291,21 @@ int mainMentor() {
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+        printf("Enter your choice: ");
+        choice = getValidatedInteger();
 
         if (choice == 1) {
             signup_mentor();
         } else if (choice == 2) {
             mentor_entry();
         } else if (choice == 3) {
-            printf("Exiting...\n");
+            printf("Exiting");
+            for (int i = 0; i < 3; i++){
+                Sleep(300);
+                printf(".");
+            }
+            Sleep(300);
+            system("cls");
             break;
         } else {
             system("cls");

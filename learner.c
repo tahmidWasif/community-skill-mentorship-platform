@@ -1,6 +1,7 @@
 #include "learner.h"
 #include "getPassword.h"    // for getPassword() function
 #include "setColor.h"       // for set_color() function
+#include "validateInput.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -285,10 +286,9 @@ void learner_entry() {
         printf("4. Chat with Mentor\n");
         printf("5. View/Delete My Issues\n");
         printf("6. Return to Learner Access Menu\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+        printf("Enter your choice: ");
+        choice = getValidatedInteger();
+        
         // system("cls");
 
         switch (choice) {
@@ -297,7 +297,15 @@ void learner_entry() {
             case 3: system("cls"); view_comments(username); break;
             case 4: system("cls"); mentor_chat(); break;
             case 5: system("cls"); manage_issues(username); break;
-            case 6: system("cls"); printf("Returning to learner access menu...\n"); break;
+            case 6: 
+                printf("\nReturning to learner access menu");
+                for (int i = 0; i < 3; i++){
+                    Sleep(300);
+                    printf(".");
+                }
+                Sleep(300);
+                system("cls"); 
+                break;
             default:
             printf("Invalid choice.\n\n");
             break;
@@ -333,16 +341,15 @@ void manage_issues(const char *username) {
         return;
     }
 
-    printf("\n=== Your Reported Issues ===\n");
+    printf("\n=== Your Reported Issues ===\n\n");
     for (int i = 0; i < count; i++) {
         printf("%d. [%s] %s (IP: %s)\n", i + 1, courses[i], issues[i], ips[i]);
     }
 
     int choice;
-    printf("Enter the issue number to delete it (or 0 to cancel): ");
-    scanf("%d", &choice);
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+    printf("\n=== Select an Issue ID to delete (0 to cancel) ===\n\n");
+    printf("Enter your choice: ");
+    choice = getValidatedInteger();
 
     if (choice > 0 && choice <= count) {
         FILE* wfp = fopen("temp_issues.txt", "w");
@@ -393,30 +400,39 @@ void manage_issues(const char *username) {
         system("git push origin chat");
         // system("cls");
         printf("Issue deleted.\n");
-    } else {
+    } 
+    else if (choice == 0) {
         printf("No issue deleted.\n");
+    }
+    else {
+        printf("Invalid Input.\n");
     }
 }
 
 int mainLearner() {
     int choice;
     while (1) {
-        printf("\n=== Learner Access ===\n");
+        printf("\n=== Learner Access ===\n\n");
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
-        system("cls");
+        printf("Enter your choice: ");
+        choice = getValidatedInteger();
+
+        // system("cls");
 
         if (choice == 1) {
             signup_learner();
         } else if (choice == 2) {
             learner_entry();
         } else if (choice == 3) {
-            printf("Exiting...\n");
+            printf("\nExiting");
+            for (int i = 0; i < 3; i++){
+                Sleep(300);
+                printf(".");
+            }
+            Sleep(300);
+            system("cls");
             break;
         } else {
             printf("Invalid choice.\n");
