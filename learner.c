@@ -69,7 +69,16 @@ void signup_learner() {
         fclose(fp);
 
         system("git commit -m \"Update learners.txt\" learners.txt");
-        system("git push origin chat");
+        if (!safeGitPush()) {
+            remove(LEARNER_FILE);
+            system("git commit -am \"removing learners.txt\"");
+            system("git pull origin chat");
+            system("git add learners.txt");
+            system("git commit -am \"Resolving merge conflict\"");
+            //system("cls");
+            return;
+        }
+        
         // system("cls");
         printf("Signup successful! Please log in.\n");
     } else {
@@ -395,11 +404,20 @@ void manage_issues(const char *username) {
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
 
-        // system("git commit -m \"Update issues.txt\" issues.txt");
-        // system("git commit -m \"Update comments.txt\" comments.txt");
-        // system("git push origin chat");
-        // system("cls");
-        printf("Issue deleted.\n");
+        system("git commit -m \"Update issues.txt\" issues.txt");
+        system("git commit -m \"Update comments.txt\" comments.txt");
+        if (!safeGitPush()) {
+            remove(ISSUE_FILE);
+            remove(COMMENT_FILE);
+            system("git commit -am \"Update issues.txt\"");
+            system("git pull origin chat");
+            system("git add issues.txt");
+            system("git add comments.txt");
+            system("git commit -am \"Resolving merge conflict\"");
+            //system("cls");
+            printf("Issue deleted.\n");
+            return;
+        }
     } 
     else if (choice == 0) {
         printf("No issue deleted.\n");
