@@ -78,6 +78,7 @@ void signup_mentor() {
     printf("Which course will you mentor?: ");
     set_color(BRIGHT_WHITE);
     scanf("%s", course);
+    getchar();
     if (fp) {
         fprintf(fp, "%s,%s,%s,%s\n", username, password, course, ip);
         set_color(LIGHT_GREEN);
