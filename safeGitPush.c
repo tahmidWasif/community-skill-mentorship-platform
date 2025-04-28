@@ -7,8 +7,8 @@ int safeGitPush() {
     char cmd[128];
     int push_failed, status;
 
-    // build: git push origin chat 2>&1
-    snprintf(cmd, sizeof(cmd), "git push origin chat 2>&1");
+    // build: git push origin liveDB 2>&1
+    snprintf(cmd, sizeof(cmd), "git push origin liveDB 2>&1");
 
     do {
         push_failed = 0;
