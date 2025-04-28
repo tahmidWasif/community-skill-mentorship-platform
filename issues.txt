@@ -11,3 +11,4 @@
 2,kabir,CS,project again,172.20.10.6
 6,wasif,CS,2,2
 7,wasif,CS,mentor,172.20.10.5
+8,wasif,math,exe,170.20.10.5
