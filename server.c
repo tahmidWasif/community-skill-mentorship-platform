@@ -53,7 +53,6 @@ void view_all_comments() {
 void server_menu() {
     int choice;
     do {
-        system("cls");
         printf("\n=== Server Menu ===\n\n");
         printf("1. View All Issues\n");
         printf("2. View All Comments\n");
