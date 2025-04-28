@@ -1,3 +1,4 @@
+#include "server.h"
 #include "getPassword.h"
 
 #include <stdio.h>
@@ -83,7 +84,7 @@ int admin_login() {
     }
 }
 
-int main() {
+int mainServer() {
     int choice;
     do {
         printf("\n=== Main Menu ===\n");
@@ -91,7 +92,8 @@ int main() {
         printf("2. Exit\n");
         printf("Choice: ");
         scanf("%d", &choice);
-        getchar();
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
 
         switch (choice) {
             case 1:
@@ -101,8 +103,10 @@ int main() {
                 break;
             case 2:
                 printf("Exiting...\n");
+                while ((c = getchar()) != '\n' && c != EOF) printf("%d,", c);    //consumes leftover characters if there are any
                 break;
             default:
+                while ((c = getchar()) != '\n' && c != EOF) printf("%d,", c);    //consumes leftover characters if there are any
                 printf("Invalid option.\n");
         }
     } while (choice != 2);

@@ -1,3 +1,4 @@
+#include "mentor.h"
 #include "getPassword.h"
 #include "setColor.h"
 
@@ -23,7 +24,7 @@
 void get_learner_ip(char [], char []);
 void learner_chat();
 
-int validate_user(const char *username, const char *password, char *mentor_course) {
+int validate_mentor(const char *username, const char *password, char *mentor_course) {
     FILE *fp = fopen(MENTOR_FILE, "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
@@ -38,7 +39,7 @@ int validate_user(const char *username, const char *password, char *mentor_cours
     return 0;
 }
 
-void signup_user() {
+void signup_mentor() {
     system("git pull origin chat");
     //system("cls");
 
@@ -246,7 +247,7 @@ void mentor_entry() {
     printf("Password: ");
     getPassword(password);
 
-    if (!validate_user(username, password, mentor_course)) {
+    if (!validate_mentor(username, password, mentor_course)) {
         printf("Invalid credentials or not a mentor.\n");
         return;
     }
@@ -277,7 +278,7 @@ void mentor_entry() {
     } while (choice != 4);
 }
 
-int main() {
+int mainMentor() {
     int choice;
     while (1) {
         printf("\n=== Mentor Access ===\n");
@@ -290,7 +291,7 @@ int main() {
         while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
 
         if (choice == 1) {
-            signup_user();
+            signup_mentor();
         } else if (choice == 2) {
             mentor_entry();
         } else if (choice == 3) {

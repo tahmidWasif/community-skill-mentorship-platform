@@ -1,3 +1,4 @@
+#include "learner.h"
 #include "getPassword.h"    // for getPassword() function
 #include "setColor.h"       // for set_color() function
 
@@ -26,7 +27,7 @@ void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]);
 void mentor_chat();
 void view_mentors();
 
-int validate_user(const char *username, const char *password) {     //check if username exists
+int validate_learner(const char *username, const char *password) {     //check if username exists
     FILE *fp = fopen(LEARNER_FILE, "r");
     if (!fp) return 0;
     char line[150], u[50], p[50];
@@ -41,7 +42,7 @@ int validate_user(const char *username, const char *password) {     //check if u
     return 0;
 }
 
-void signup_user() {
+void signup_learner() {
     system("git pull origin chat");
     //system("cls");
     char username[50], password[50], ip[20];
@@ -268,7 +269,7 @@ void learner_entry() {
     printf("Password: ");
     getPassword(password);
 
-    if (!validate_user(username, password)) {
+    if (!validate_learner(username, password)) {
         printf("Invalid credentials or not a learner.\n");
         return;
     }
@@ -397,7 +398,7 @@ void manage_issues(const char *username) {
     }
 }
 
-int main() {
+int mainLearner() {
     int choice;
     while (1) {
         printf("\n=== Learner Access ===\n");
@@ -411,7 +412,7 @@ int main() {
         system("cls");
 
         if (choice == 1) {
-            signup_user();
+            signup_learner();
         } else if (choice == 2) {
             learner_entry();
         } else if (choice == 3) {

@@ -1,9 +1,10 @@
 #include <stdio.h>
 
 // Importing menu functions from other .c files
-#include "server.c"
-#include "learner.c"
-#include "mentor.c"
+#include "validateInput.h"
+#include "server.h"
+#include "learner.h"
+#include "mentor.h"
 
 int main() {
     int mainChoice;
@@ -14,8 +15,8 @@ int main() {
         printf("2. Learner Program\n");
         printf("3. Mentor Program\n");
         printf("4. Exit\n");
-        printf("Choice: ");
-        scanf("%d", &mainChoice);
+        printf("Enter your choice: ");
+        mainChoice = getValidatedInteger();     // returns -1 for invalid input
 
         switch(mainChoice) {
             case 1:
