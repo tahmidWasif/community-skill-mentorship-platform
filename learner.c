@@ -114,7 +114,7 @@ void submit_issue(const char *username) {
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git push origin chat");
-        system("cls");
+        // system("cls");
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
     } else {
