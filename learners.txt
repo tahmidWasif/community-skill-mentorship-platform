@@ -1,2 +1,3 @@
 kabir,kabir
 wasifLearner,pass
+ni,ce
