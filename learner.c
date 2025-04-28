@@ -385,7 +385,6 @@ void manage_issues(const char *username) {
                 }
                 else {
                     deleteId = id[i];
-                    printf("Comment ID: %d\n", deleteId);
                 }
                 i++;
             }
