@@ -119,6 +119,8 @@ void submit_issue(const char *username) {
             remove(ISSUE_FILE);
             system("git commit -am \"Update issues.txt\"");
             system("git pull origin chat");
+            system("git add issues.txt");
+            system("git commit -am \"Resolving merge conflict\"");
             //system("cls");
             return;
         }
