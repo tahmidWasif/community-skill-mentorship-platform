@@ -85,19 +85,22 @@ void submit_issue(const char *username) {
     printf("Enter course title: ");
 
     set_color(BRIGHT_WHITE);
-    scanf(" %[^\n]", course);
+    fgets(course, sizeof(course), stdin);
+    course[strcspn(course, "\n")] = '\0';
     
     set_color(LIGHT_AQUA);
     printf("Describe your issue: ");
     
     set_color(BRIGHT_WHITE);
-    scanf(" %[^\n]", issue);
+    fgets(issue, sizeof(issue), stdin);
+    issue[strcspn(issue, "\n")] = '\0';
     
     set_color(LIGHT_AQUA);
     printf("Enter your IP address: ");
     
     set_color(BRIGHT_WHITE);
     fgets(ip, sizeof(ip), stdin);
+    ip[strcspn(ip, "\n")] = '\0';
     
     FILE *fp = fopen(ISSUE_FILE, "a+");
     if (fp) {
