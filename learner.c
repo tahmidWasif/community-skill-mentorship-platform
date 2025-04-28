@@ -2,7 +2,6 @@
 #include "getPassword.h"    // for getPassword() function
 #include "setColor.h"       // for set_color() function
 #include "validateInput.h"
-#include "safeGitPush.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +9,6 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <conio.h>
-#include <io.h>
 #pragma comment(lib, "ws2_32.lib")
 
 #define CHAT_LOG_FILE "chat_history.txt"
@@ -81,7 +79,7 @@ void signup_learner() {
 
 void submit_issue(const char *username) {
     system("git pull origin chat");
-    // system("cls");
+    system("cls");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -115,21 +113,11 @@ void submit_issue(const char *username) {
         fclose(fp);
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
-        if (!safeGitPush()) {
-            remove(ISSUE_FILE);
-            system("git commit -am \"Update issues.txt\"");
-            system("git pull origin chat");
-            system("git add issues.txt");
-            system("git commit -am \"Resolving merge conflict\"");
-            //system("cls");
-            return;
-        }
-        
+        system("git push origin chat");
         // system("cls");
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
-    } 
-    else {
+    } else {
         set_color(LIGHT_RED);
         printf("\nFailed to submit issue.\n");
     }
@@ -328,7 +316,7 @@ void learner_entry() {
 
 
 void manage_issues(const char *username) {
-    system("git pull origin chat");
+    // system("git pull origin chat");
     // system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
@@ -407,20 +395,11 @@ void manage_issues(const char *username) {
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
 
-        system("git commit -m \"Update issues.txt\" issues.txt");
-        system("git commit -m \"Update comments.txt\" comments.txt");
-        if (!safeGitPush()) {
-            remove(ISSUE_FILE);
-            remove(COMMENT_FILE);
-            system("git commit -am \"Update issues.txt\"");
-            system("git pull origin chat");
-            system("git add issues.txt");
-            system("git add comments.txt");
-            system("git commit -am \"Resolving merge conflict\"");
-            //system("cls");
-            printf("Issue deleted.\n");
-            return;
-        }
+        // system("git commit -m \"Update issues.txt\" issues.txt");
+        // system("git commit -m \"Update comments.txt\" comments.txt");
+        // system("git push origin chat");
+        // system("cls");
+        printf("Issue deleted.\n");
     } 
     else if (choice == 0) {
         printf("No issue deleted.\n");
