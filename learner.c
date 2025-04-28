@@ -337,8 +337,8 @@ void learner_entry() {
 
 
 void manage_issues(const char *username) {
-    //system("git pull origin liveDB");
-    // system("cls");
+    system("git pull origin liveDB");
+    system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
         printf("No issues found.\n");
@@ -414,10 +414,10 @@ void manage_issues(const char *username) {
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
 
-        // system("git commit -m \"Update issues.txt\" issues.txt");
-        // system("git commit -m \"Update comments.txt\" comments.txt");
-        // system("git push origin liveDB");
-        //system("cls");
+        system("git commit -m \"Update issues.txt\" issues.txt");
+        system("git commit -m \"Update comments.txt\" comments.txt");
+        system("git push origin liveDB");
+        system("cls");
         printf("Issue deleted.\n");
     } 
     else if (choice == 0) {
