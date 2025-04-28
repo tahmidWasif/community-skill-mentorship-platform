@@ -315,7 +315,7 @@ void learner_entry() {
     int choice;
     do {
         set_color(LIGHT_AQUA);
-        printf("\n=== Learner Menu ===\n");
+        printf("\n=== Learner Menu ===\n\n");
         printf("1. Submit a Help Request\n");
         printf("2. View Mentor List\n");
         printf("3. View Mentor Comments\n");
@@ -379,11 +379,13 @@ void manage_issues(const char *username) {
     fclose(fp);
 
     if (count == 0) {
+        set_color(LIGHT_YELLOW);
         printf("You have no previous issues.\n");
         return;
     }
-
+    set_color(LIGHT_AQUA);
     printf("\n=== Your Reported Issues ===\n\n");
+    set_color(BRIGHT_WHITE);
     for (int i = 0; i < count; i++) {
         printf("%d. [%s] %s (IP: %s)\n", i + 1, courses[i], issues[i], ips[i]);
     }

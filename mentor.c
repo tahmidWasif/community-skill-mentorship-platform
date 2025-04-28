@@ -120,7 +120,7 @@ void view_issues(const char *mentor_course) {
     }
 
     set_color(PURPLE);
-    printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n", course_upper);
+    printf("\n=== LEARNER ISSUES FOR COURSE: %s ===\n\n", course_upper);
     set_color(BRIGHT_WHITE);
     while (fgets(line, sizeof(line), fp)) {
         sscanf(line, "%[^,],%[^,],%[^,],%[^,],%[^\n]", id, username, course, issue, ip);
@@ -175,7 +175,7 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
             }
             fprintf(cfp, "%d,%s,%s,%s,%s\n", id, username, course, comment, mentorUsername);
             set_color(LIGHT_GREEN);
-            printf("Comment added successfully!\n");
+            printf("\nComment added successfully!\n\n");
             break;
         }
         count++;
@@ -309,7 +309,7 @@ void mentor_entry() {
     int choice;
     do {
         set_color(PURPLE);
-        printf("\n=== Mentor Menu ===\n");
+        printf("\n=== Mentor Menu ===\n\n");
         printf("1. View Learner Issues\n");
         printf("2. Comment on an Issue\n");
         printf("3. Chat with Learner\n");
@@ -343,7 +343,7 @@ int mainMentor() {
     int choice;
     while (1) {
         set_color(PURPLE);
-        printf("\n=== Mentor Access ===\n");
+        printf("\n=== Mentor Access ===\n\n");
         printf("1. Sign Up\n");
         printf("2. Log In\n");
         printf("3. Exit\n");

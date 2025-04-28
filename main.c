@@ -21,15 +21,19 @@ int main() {
 
         switch(mainChoice) {
             case 1:
+                system("cls");
                 mainServer();
                 break;
             case 2:
+                system("cls");
                 mainLearner();
                 break;
             case 3:
+                system("cls");
                 mainMentor();
                 break;
             case 4:
+                system("cls");
                 printf("Exiting the entire program");
                 for (int i = 0; i < 3; i++){
                     Sleep(300);
