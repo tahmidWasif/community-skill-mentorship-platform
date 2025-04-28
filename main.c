@@ -46,7 +46,7 @@ int main() {
             default:
                 system("cls");
                 printf("Invalid choice. Please select again.\n");
-                Sleep(1000);
+                Sleep(1500);
         }
     }
     return 0;

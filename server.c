@@ -26,7 +26,7 @@ void view_all_issues() {
         return;
     }
     char line[512];
-    printf("\n=== Submitted Issues ===\n");
+    printf("\n=== Submitted Issues ===\n\n");
     while (fgets(line, sizeof(line), fp)) {
         printf("%s", line);
     }
@@ -43,7 +43,7 @@ void view_all_comments() {
         return;
     }
     char line[512];
-    printf("\n=== Mentor Comments ===\n");
+    printf("\n=== Mentor Comments ===\n\n");
     while (fgets(line, sizeof(line), fp)) {
         printf("%s", line);
     }
@@ -53,7 +53,8 @@ void view_all_comments() {
 void server_menu() {
     int choice;
     do {
-        printf("\n=== Server Menu ===\n");
+        system("cls");
+        printf("\n=== Server Menu ===\n\n");
         printf("1. View All Issues\n");
         printf("2. View All Comments\n");
         printf("3. Return to Main Menu\n");
@@ -72,7 +73,10 @@ void server_menu() {
                 Sleep(300);
                 system("cls");
                 break;
-            default: printf("Invalid option.\n");
+            default: 
+                system("cls");
+                printf("\nInvalid option.\n");
+                Sleep(1500);
         }
     } while (choice != 3);
 }
@@ -96,7 +100,8 @@ int admin_login() {
 int mainServer() {
     int choice;
     do {
-        printf("\n=== Main Menu ===\n");
+        system("cls");
+        printf("\n=== Main Menu ===\n\n");
         printf("1. Admin Login (Server Access)\n");
         printf("2. Exit\n");
         printf("Enter your choice: ");
@@ -118,7 +123,9 @@ int mainServer() {
                 system("cls");
                 break;
             default:
+                system("cls");
                 printf("Invalid option.\n");
+                Sleep(1500);
         }
     } while (choice != 2);
 

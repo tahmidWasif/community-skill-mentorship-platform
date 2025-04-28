@@ -314,6 +314,7 @@ void learner_entry() {
 
     int choice;
     do {
+        system("cls");
         set_color(LIGHT_AQUA);
         printf("\n=== Learner Menu ===\n\n");
         printf("1. Submit a Help Request\n");
@@ -344,8 +345,10 @@ void learner_entry() {
                 system("cls"); 
                 break;
             default:
+            system("cls");
             set_color(LIGHT_RED);
             printf("Invalid choice.\n\n");
+            Sleep(1500);
             break;
         }
 
@@ -464,6 +467,7 @@ void manage_issues(const char *username) {
 int mainLearner() {
     int choice;
     while (1) {
+        system("cls");
         set_color(LIGHT_AQUA);
         printf("\n=== Learner Access ===\n\n");
         printf("1. Sign Up\n");
@@ -476,8 +480,10 @@ int mainLearner() {
         system("cls");
 
         if (choice == 1) {
+            system("cls");
             signup_learner();
         } else if (choice == 2) {
+            system("cls");
             learner_entry();
         } else if (choice == 3) {
             printf("\nExiting");
@@ -489,8 +495,10 @@ int mainLearner() {
             system("cls");
             break;
         } else {
+            system("cls");
             set_color(LIGHT_RED);
             printf("Invalid choice.\n");
+            Sleep(1500);
         }
     }
     return 0;
