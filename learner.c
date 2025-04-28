@@ -2,7 +2,6 @@
 #include "getPassword.h"    // for getPassword() function
 #include "setColor.h"       // for set_color() function
 #include "validateInput.h"
-#include "safeGitPush.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +9,6 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <conio.h>
-#include <io.h>
 #pragma comment(lib, "ws2_32.lib")
 
 #define CHAT_LOG_FILE "chat_history.txt"
@@ -46,7 +44,7 @@ int validate_learner(const char *username, const char *password) {     //check i
 }
 
 void signup_learner() {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
     char username[50], password[50], ip[20];
     FILE *fp = fopen(LEARNER_FILE, "a+");
@@ -74,7 +72,7 @@ void signup_learner() {
         if (!safeGitPush()) {
             remove(LEARNER_FILE);
             system("git commit -am \"removing learners.txt\"");
-            system("git pull origin chat");
+            system("git pull origin liveDB");
             system("git add learners.txt");
             system("git commit -am \"Resolving merge conflict\"");
             //system("cls");
@@ -89,8 +87,8 @@ void signup_learner() {
 }
 
 void submit_issue(const char *username) {
-    system("git pull origin chat");
-    // system("cls");
+    system("git pull origin liveDB");
+    system("cls");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -124,21 +122,11 @@ void submit_issue(const char *username) {
         fclose(fp);
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
-        if (!safeGitPush()) {
-            remove(ISSUE_FILE);
-            system("git commit -am \"Update issues.txt\"");
-            system("git pull origin chat");
-            system("git add issues.txt");
-            system("git commit -am \"Resolving merge conflict\"");
-            //system("cls");
-            return;
-        }
-        
+        system("git push origin liveDB");
         // system("cls");
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
-    } 
-    else {
+    } else {
         set_color(LIGHT_RED);
         printf("\nFailed to submit issue.\n");
     }
@@ -146,7 +134,7 @@ void submit_issue(const char *username) {
 }
 
 void view_comments(const char *username) {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
     FILE *fp = fopen(COMMENT_FILE, "r");
     if (!fp) {
@@ -264,7 +252,7 @@ void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
 }
 
 void view_mentors() {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     // system("cls");
     FILE* fp = fopen(MENTOR_FILE, "r");
     char line[512], user[MAX_USERNAME_LENGTH], garbage[MAX_PASSWORD_LENGTH], course[100], garbage2[20];
@@ -282,7 +270,7 @@ void view_mentors() {
 
 
 void learner_entry() {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
     
     char username[50], password[50];
@@ -337,7 +325,7 @@ void learner_entry() {
 
 
 void manage_issues(const char *username) {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     // system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
@@ -418,10 +406,18 @@ void manage_issues(const char *username) {
 
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git commit -m \"Update comments.txt\" comments.txt");
-        system("git push origin chat");
-        //system("cls");
-        printf("Issue deleted.\n");
-        
+        if (!safeGitPush()) {
+            remove(ISSUE_FILE);
+            remove(COMMENT_FILE);
+            system("git commit -am \"Update issues.txt\"");
+            system("git pull origin liveDB");
+            system("git add issues.txt");
+            system("git add comments.txt");
+            system("git commit -am \"Resolving merge conflict\"");
+            //system("cls");
+            printf("Issue deleted.\n");
+            return;
+        }
     } 
     else if (choice == 0) {
         printf("No issue deleted.\n");
