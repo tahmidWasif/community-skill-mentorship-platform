@@ -357,7 +357,7 @@ void manage_issues(const char *username) {
         char issueLine[512], issueUser[MAX_USERNAME_LENGTH], issueCourse[100], issueIssue[256], issueIp[20];
         int issueId, deleteId;
         while (fgets(issueLine, sizeof(issueLine), issues)){
-            sscanf(issueLine, "%d,%[^,],%[^,],%[^,],%[^\n]", &issueId, issueUser, issueIssue, issueIp);
+            sscanf(issueLine, "%d,%[^,],%[^,],%[^,],%[^\n]", &issueId, issueUser, issueCourse, issueIssue, issueIp);
             if (strcmp(issueUser, username) == 0){
                 for (int i = 0; i < count; i++) {
                     if (i != choice - 1) {
