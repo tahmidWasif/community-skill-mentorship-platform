@@ -290,7 +290,6 @@ void learner_entry() {
         printf("5. View/Delete My Issues\n");
         printf("6. Return to Learner Access Menu\n");
         printf("Enter your choice: ");
-        printf("%d,", choice);
         choice = getValidatedInteger();
         
         // system("cls");
