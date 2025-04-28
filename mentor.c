@@ -74,9 +74,16 @@ void signup_mentor() {
     }
     fclose(fp);
     system("git commit -m \"Update mentors.txt\" mentors.txt");
-    system("git push origin liveDB");
-    // system("cls");
-}
+    if (!safeGitPush()) {
+        remove(MENTOR_FILE);
+        system("git commit -am \"removing learners.txt\"");
+        system("git pull origin liveDB");
+        system("git add learners.txt");
+        system("git commit -am \"Resolving merge conflict\"");
+        //system("cls");
+        return;
+    }
+    
 
 void view_issues(const char *mentor_course) {
     system("git pull origin liveDB");
@@ -156,7 +163,15 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
     fclose(fp);
     fclose(cfp);
     system("git commit -m \"Update comments.txt\" comments.txt");
-    system("git push origin liveDB");
+    if (!safeGitPush()) {
+        remove(LEARNER_FILE);
+        system("git commit -am \"removing learners.txt\"");
+        system("git pull origin liveDB");
+        system("git add learners.txt");
+        system("git commit -am \"Resolving merge conflict\"");
+        //system("cls");
+        return;
+    }
     //system("cls");
     set_color(BRIGHT_WHITE);
 }
