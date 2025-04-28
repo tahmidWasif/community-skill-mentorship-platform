@@ -10,6 +10,7 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <conio.h>
+#include <io.h>
 #pragma comment(lib, "ws2_32.lib")
 
 #define CHAT_LOG_FILE "chat_history.txt"
