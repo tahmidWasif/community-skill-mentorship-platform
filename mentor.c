@@ -41,7 +41,7 @@ int validate_mentor(const char *username, const char *password, char *mentor_cou
 }
 
 void signup_mentor() {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
 
     char username[50], password[50], course[100], ip[20];
@@ -74,12 +74,12 @@ void signup_mentor() {
     }
     fclose(fp);
     system("git commit -m \"Update mentors.txt\" mentors.txt");
-    system("git push origin chat");
+    system("git push origin liveDB");
     // system("cls");
 }
 
 void view_issues(const char *mentor_course) {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
@@ -109,7 +109,7 @@ void view_issues(const char *mentor_course) {
 }
 
 void add_comment(const char *mentor_course, const char* mentorUsername) {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
 
     view_issues(mentor_course);
@@ -156,7 +156,7 @@ void add_comment(const char *mentor_course, const char* mentorUsername) {
     fclose(fp);
     fclose(cfp);
     system("git commit -m \"Update comments.txt\" comments.txt");
-    system("git push origin chat");
+    system("git push origin liveDB");
     //system("cls");
     set_color(BRIGHT_WHITE);
 }
@@ -238,7 +238,7 @@ void get_learner_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
 }
 
 void mentor_entry() {
-    system("git pull origin chat");
+    system("git pull origin liveDB");
     //system("cls");
 
     char username[50], password[50], mentor_course[100];
