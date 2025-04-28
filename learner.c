@@ -45,14 +45,16 @@ int validate_learner(const char *username, const char *password) {     //check i
 
 void signup_learner() {
     set_color(LIGHT_YELLOW);
-    printf("Loading...");
+    printf("Loading...\n");
     set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
+    system("cls");
     char username[50], password[50], ip[20];
     FILE *fp = fopen(LEARNER_FILE, "a+");
     signUp:
+    set_color(LIGHT_AQUA);
     printf("Choose a username: ");
+    set_color(BRIGHT_WHITE);
     scanf("%s", username);
     //validate if username already exists
     char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
@@ -64,25 +66,35 @@ void signup_learner() {
             goto signUp;
         }
     }
+    set_color(LIGHT_AQUA);
     printf("Choose a password: ");
+    set_color(BRIGHT_WHITE);
     getPassword(password);
 
     if (fp) {
         fprintf(fp, "%s,%s\n", username, password);
         fclose(fp);
 
+        set_color(LIGHT_YELLOW);
+        printf("Loading...\n");
+        set_color(BLACK);
         system("git commit -m \"Update learners.txt\" learners.txt");
         system("git push origin newChatRecovery");
-        // system("cls");
+        system("cls");
+        set_color(LIGHT_GREEN);
         printf("Signup successful! Please log in.\n");
     } else {
+        set_color(LIGHT_RED);
         printf("Failed to register.\n");
     }
 }
 
 void submit_issue(const char *username) {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    // system("cls");
+    system("cls");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -118,9 +130,13 @@ void submit_issue(const char *username) {
         fprintf(fp, "%d,%s,%s,%s,%s", usernameCount, username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
         // updating file to server
+        set_color(LIGHT_YELLOW);
+        printf("Loading...\n");
+        set_color(BLACK);
         system("git commit -m \"Update issues.txt\" issues.txt");
         system("git push origin newChatRecovery");
-        // system("cls");
+        system("cls");
+
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
     } else {
@@ -131,8 +147,11 @@ void submit_issue(const char *username) {
 }
 
 void view_comments(const char *username) {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
+    system("cls");
     FILE *fp = fopen(COMMENT_FILE, "r");
     if (!fp) {
         set_color(LIGHT_RED);
@@ -214,12 +233,16 @@ void mentor_chat(){
         }
         fclose(fp);
         system("cls");
+        set_color(LIGHT_RED);
         printf("Invalid username\nExiting network chat...\n\n");
+        set_color(BRIGHT_WHITE);
         return;
 
     }
     else {
+        set_color(LIGHT_RED);
         printf("Failed to access files...\n");
+        set_color(BRIGHT_WHITE);
     }
     
 }
@@ -249,14 +272,18 @@ void get_mentor_ip(char user[MAX_USERNAME_LENGTH], char ip[20]) {
 }
 
 void view_mentors() {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    // system("cls");
+    system("cls");
+
     FILE* fp = fopen(MENTOR_FILE, "r");
     char line[512], user[MAX_USERNAME_LENGTH], garbage[MAX_PASSWORD_LENGTH], course[100], garbage2[20];
     int count = 1;
-    set_color(5);
+    set_color(PURPLE);
     printf("\n=== Mentor List ===\n\n");
-    set_color(15);
+    set_color(BRIGHT_WHITE);
     while (fgets(line, sizeof(line), fp)) {
         sscanf(line, "%[^,],%[^,],%[^,],%[^\n]", user, garbage, course, garbage2);
         printf("%d.\nMentor username: %s\nCourse: %s\n\n", count++, user, course);
@@ -267,8 +294,12 @@ void view_mentors() {
 
 
 void learner_entry() {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...\n");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
-    //system("cls");
+    system("cls");
+    set_color(BRIGHT_WHITE);
     
     char username[50], password[50];
     printf("Username: ");

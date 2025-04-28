@@ -60,21 +60,11 @@ int main(int argc, char* argv[])
     printf("Sent\t\t\t\t\t\t\t\t\t\t\tReceived\n\n");
     
     // Start chat loop until someone types a string starting with QUIT
-    int p = 0;
     while(!quit)
     {
-        if (p == 0){
-            printf("> ");
-        }
-        p = 1;
-        // send string
-        // if keyboard has been hit:
-        // read a string from the keyboard and send
-        // send the string to the remote port
-        // leave while loop if a string starting with QUIT was sent
+        // if keyboard has been hit, send string, quit to exit
         if (_kbhit())
         {
-
             while (1){      //validating input length
                 fgets(str, 101, stdin);
                 
@@ -82,7 +72,7 @@ int main(int argc, char* argv[])
                     break;
                 }
                 else {
-                    printf("\nInput too long. Max limit: 100 characters\n\n> ");
+                    printf("\nInput too long. Max limit: 100 characters\n\n ");
                     int c;
                     // clears input buffer
                     while ((c = getchar()) != '\n' && c != EOF);
@@ -101,7 +91,6 @@ int main(int argc, char* argv[])
                     quit=true;
                 }
             }
-            p--;
         }
         // receive text
         // if data is received:
@@ -110,7 +99,7 @@ int main(int argc, char* argv[])
             bool receive = receiveUdpData(str, 100, 10);
             if (receive)
             {
-                printf("\t\t\t\t\t\t\t\t\t\t\t> %s", str);
+                printf("\t\t\t\t\t\t\t\t\t\t\t %s", str);
                 for (int i = 0; str[i] != '\0'; i++){
                     str[i] = toupper(str[i]);
                 }
