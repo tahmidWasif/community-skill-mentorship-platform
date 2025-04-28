@@ -79,7 +79,7 @@ void signup_learner() {
 
 void submit_issue(const char *username) {
     system("git pull origin newChatRecovery");
-    system("cls");
+    // system("cls");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -97,7 +97,7 @@ void submit_issue(const char *username) {
     printf("Enter your IP address: ");
     
     set_color(BRIGHT_WHITE);
-    scanf(" %[^\n]", ip);
+    fgets(ip, sizeof(ip), stdin);
     
     FILE *fp = fopen(ISSUE_FILE, "a+");
     if (fp) {
@@ -109,7 +109,7 @@ void submit_issue(const char *username) {
                 usernameCount = count + 1;
             }
         }
-        fprintf(fp, "%d,%s,%s,%s,%s\n", usernameCount, username, course, issue, ip);       //ip address needs to be changed
+        fprintf(fp, "%d,%s,%s,%s,%s", usernameCount, username, course, issue, ip);       //ip address needs to be changed
         fclose(fp);
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
@@ -287,6 +287,7 @@ void learner_entry() {
         printf("5. View/Delete My Issues\n");
         printf("6. Return to Learner Access Menu\n");
         printf("Enter your choice: ");
+        printf("%d,", choice);
         choice = getValidatedInteger();
         
         // system("cls");
