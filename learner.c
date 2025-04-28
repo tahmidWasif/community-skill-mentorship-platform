@@ -79,9 +79,8 @@ void signup_learner() {
 }
 
 void submit_issue(const char *username) {
-    tryPull:
     system("git pull origin chat");
-    system("cls");
+    // system("cls");
     char course[100], issue[256], ip[20];
     set_color(LIGHT_AQUA);
     printf("Enter course title: ");
@@ -116,7 +115,7 @@ void submit_issue(const char *username) {
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
         if (!safeGitPush()) {
-            goto tryPull;
+            return;
         }
         // system("cls");
         set_color(LIGHT_GREEN);
