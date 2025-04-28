@@ -337,7 +337,7 @@ void learner_entry() {
 
 
 void manage_issues(const char *username) {
-    system("git pull origin liveDB");
+    //system("git pull origin liveDB");
     // system("cls");
     FILE *fp = fopen(ISSUE_FILE, "r");
     if (!fp) {
@@ -378,7 +378,7 @@ void manage_issues(const char *username) {
         char issueLine[512], issueUser[MAX_USERNAME_LENGTH], issueCourse[100], issueIssue[256], issueIp[20];
         int issueId, deleteId;
         while (fgets(issueLine, sizeof(issueLine), issues)){
-            sscanf(issueLine, "%d,%[^,],%[^,],%[^,],%[^\n]", &issueId, issueUser, issueIssue, issueIp);
+            sscanf(issueLine, "%d,%[^,],%[^,],%[^,],%[^\n]", &issueId, issueUser, issueCourse, issueIssue, issueIp);
             if (strcmp(issueUser, username) == 0){
                 for (int i = 0; i < count; i++) {
                     if (i != choice - 1) {
@@ -417,11 +417,9 @@ void manage_issues(const char *username) {
 
         // system("git commit -m \"Update issues.txt\" issues.txt");
         // system("git commit -m \"Update comments.txt\" comments.txt");
-        // system("git pull origin liveDB");
-        // system("git commit -am \"backing files up\"");
-        // system("cls");
+        // system("git push origin liveDB");
+        //system("cls");
         printf("Issue deleted.\n");
-        
     } 
     else if (choice == 0) {
         printf("No issue deleted.\n");
@@ -430,7 +428,6 @@ void manage_issues(const char *username) {
         printf("Invalid Input.\n");
     }
 }
-
 int mainLearner() {
     int choice;
     while (1) {
