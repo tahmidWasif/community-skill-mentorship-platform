@@ -98,7 +98,7 @@ void submit_issue(const char *username) {
 
     set_color(BRIGHT_WHITE);
     fgets(course, sizeof(course), stdin);
-    str[strcspn(str, "\n")] = '\0';
+    course[strcspn(course, "\n")] = '\0';
     
     set_color(LIGHT_AQUA);
     printf("Describe your issue: ");
@@ -106,14 +106,14 @@ void submit_issue(const char *username) {
     
     set_color(BRIGHT_WHITE);
     fgets(issue,sizeof(issue),stdin);
-    str[strcspn(str, "\n")] = '\0';
+    issue[strcspn(issue, "\n")] = '\0';
     
     set_color(LIGHT_AQUA);
     printf("Enter your IP address: ");
     
     set_color(BRIGHT_WHITE);
     fgets(ip, sizeof(ip), stdin);
-    str[strcspn(str, "\n")] = '\0';
+    ip[strcspn(ip, "\n")] = '\0';
     
     FILE *fp = fopen(ISSUE_FILE, "a+");
     if (fp) {
@@ -294,7 +294,8 @@ void learner_entry() {
     
     char username[50], password[50];
     printf("Username: ");
-    scanf("%s", username);
+    fgets(username,sizeof(username),stdin);
+    username[strcspn(username, "\n")] = '\0';
     printf("Password: ");
     getPassword(password);
 

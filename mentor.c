@@ -2,6 +2,7 @@
 #include "getPassword.h"
 #include "setColor.h"
 #include "validateInput.h"
+#include "safeGitPush.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -49,7 +50,8 @@ void signup_mentor() {
     FILE *fp = fopen(MENTOR_FILE, "a+");
     signUp:
     printf("Choose a username: ");
-    scanf("%s", username);
+    fgets(username,sizeof(username),stdin);
+    username[strcspn(username, "\n")] = '\0';
     //validate if username already exists
     char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
     rewind(fp);
@@ -64,9 +66,11 @@ void signup_mentor() {
     printf("Choose a password: ");
     getPassword(password);
     printf("Enter your IP address: ");
-    scanf("%s", ip);
+    fgets(ip,sizeof(ip),stdin);
+    ip[strcspn(ip, "\n")] = '\0';
     printf("Which course will you mentor?: ");
-    scanf("%s", course);
+    fgets(course,sizeof(course),stdin);
+    course[strcspn(course, "\n")] = '\0';
     if (fp) {
         fprintf(fp, "%s,%s,%s,%s\n", username, password, course, ip);
         printf("Signup successful! Please log in.\n");
@@ -84,7 +88,7 @@ void signup_mentor() {
         //system("cls");
         return;
     }
-    
+}
 
 void view_issues(const char *mentor_course) {
     system("git pull origin liveDB");
@@ -261,7 +265,8 @@ void mentor_entry() {
 
     char username[50], password[50], mentor_course[100];
     printf("Username: ");
-    scanf("%s", username);
+    fgets(username,sizeof(username),stdin);
+    username[strcspn(username, "\n")] = '\0';
     printf("Password: ");
     getPassword(password);
 
@@ -333,3 +338,4 @@ int mainMentor() {
     }
     return 0;
 }
+
