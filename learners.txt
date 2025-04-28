@@ -12,3 +12,4 @@ newnewnewnew,pass
 learner2pointo,pass
 new1,pass
 kabir,kabir
+aurik,aurik
