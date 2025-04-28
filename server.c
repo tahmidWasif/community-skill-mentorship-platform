@@ -100,7 +100,6 @@ int admin_login() {
 int mainServer() {
     int choice;
     do {
-        system("cls");
         printf("\n=== Main Menu ===\n\n");
         printf("1. Admin Login (Server Access)\n");
         printf("2. Exit\n");
@@ -126,6 +125,7 @@ int mainServer() {
                 system("cls");
                 printf("Invalid option.\n");
                 Sleep(1500);
+                system("cls");
         }
     } while (choice != 2);
 

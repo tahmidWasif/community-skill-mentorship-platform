@@ -308,7 +308,6 @@ void mentor_entry() {
 
     int choice;
     do {
-        system("cls");
         set_color(PURPLE);
         printf("\n=== Mentor Menu ===\n\n");
         printf("1. View Learner Issues\n");
@@ -337,6 +336,7 @@ void mentor_entry() {
                 set_color(LIGHT_RED);
                 printf("Invalid choice.\n\n");
                 Sleep(1500);
+                system("cls");
         }
     } while (choice != 4);
 }
@@ -344,7 +344,6 @@ void mentor_entry() {
 int mainMentor() {
     int choice;
     while (1) {
-        system("cls");
         set_color(PURPLE);
         printf("\n=== Mentor Access ===\n\n");
         printf("1. Sign Up\n");
@@ -374,6 +373,7 @@ int mainMentor() {
             set_color(LIGHT_RED);
             printf("Invalid choice.\n");
             Sleep(1500);
+            system("cls");
         }
     }
     return 0;
