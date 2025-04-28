@@ -44,6 +44,9 @@ int validate_learner(const char *username, const char *password) {     //check i
 }
 
 void signup_learner() {
+    set_color(LIGHT_YELLOW);
+    printf("Loading...");
+    set_color(BLACK);
     system("git pull origin newChatRecovery");
     //system("cls");
     char username[50], password[50], ip[20];
