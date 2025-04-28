@@ -5,7 +5,6 @@
 14,username,CS,files,127.0.0.1
 1,learner3,math,scantron,127.0.0.1
 2,learner3,CS,invalid input,2.2.2.2
-1,wasif,CS,kk,1.1.1.1
 2,wasif,CS,new,
 3,wasif,MATH,chat,192.168.1.142
 4,wasif,MATH,2+2,172.20.10.5
