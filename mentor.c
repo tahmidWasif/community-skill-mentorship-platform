@@ -53,8 +53,7 @@ void signup_mentor() {
     set_color(PURPLE);
     printf("Choose a username: ");
     set_color(BRIGHT_WHITE);
-    fgets(username, sizeof(username), stdin);
-    username[strcspn(username, "\n")] = '\0';
+    scanf("%s", username);
     //validate if username already exists
     char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
     rewind(fp);
@@ -74,13 +73,11 @@ void signup_mentor() {
     set_color(PURPLE);
     printf("Enter your IP address: ");
     set_color(BRIGHT_WHITE);
-    fgets(ip,sizeof(ip),stdin);
-    ip[strcspn(ip, "\n")] = '\0';
+    scanf("%s", ip);
     set_color(PURPLE);
     printf("Which course will you mentor?: ");
     set_color(BRIGHT_WHITE);
-    fgets(course,sizeof(course),stdin);
-    course[strcspn(course, "\n")] = '\0';
+    scanf("%s", course);
     if (fp) {
         fprintf(fp, "%s,%s,%s,%s\n", username, password, course, ip);
         set_color(LIGHT_GREEN);
