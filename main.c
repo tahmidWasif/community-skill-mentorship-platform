@@ -32,10 +32,10 @@ int main() {
             case 4:
                 printf("Exiting the entire program");
                 for (int i = 0; i < 3; i++){
-                    Sleep(500);
+                    Sleep(300);
                     printf(".");
                 }
-                Sleep(500);
+                Sleep(300);
                 system("cls");
                 return 0;
             default:
