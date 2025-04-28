@@ -415,11 +415,11 @@ void manage_issues(const char *username) {
         remove(ISSUE_FILE);
         rename("temp_issues.txt", ISSUE_FILE);
 
-        system("git commit -m \"Update issues.txt\" issues.txt");
-        system("git commit -m \"Update comments.txt\" comments.txt");
-        system("git pull origin liveDB");
-        system("git commit -am \"backing files up\"");
-        //system("cls");
+        // system("git commit -m \"Update issues.txt\" issues.txt");
+        // system("git commit -m \"Update comments.txt\" comments.txt");
+        // system("git pull origin liveDB");
+        // system("git commit -am \"backing files up\"");
+        // system("cls");
         printf("Issue deleted.\n");
         
     } 
