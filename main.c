@@ -11,6 +11,7 @@ int main() {
     int mainChoice;
 
     while(1) {
+        system("cls");
         printf("\n=== Program Selection Menu ===\n\n");
         printf("1. Server Program\n");
         printf("2. Learner Program\n");
@@ -43,6 +44,7 @@ int main() {
                 system("cls");
                 return 0;
             default:
+                system("cls");
                 printf("Invalid choice. Please select again.\n");
         }
     }
