@@ -115,12 +115,61 @@ void submit_issue(const char *username) {
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
         if (!safeGitPush()) {
+            FILE *fp;
+            long filesize;
+            long pos;
+            int ch;
+
+            // Open the file in read+write binary mode
+            fp = fopen(ISSUE_FILE, "rb+");
+            if (fp == NULL) {
+                perror("Error opening file");
+                return;
+            }
+
+            // Move to the end of file
+            fseek(fp, 0, SEEK_END);
+            filesize = ftell(fp);
+
+            if (filesize == 0) {
+                printf("File is empty.\n");
+                fclose(fp);
+                return;
+            }
+
+            // Start from the end and search backwards for the last '\n'
+            pos = filesize - 1;
+            while (pos >= 0) {
+                fseek(fp, pos, SEEK_SET);
+                ch = fgetc(fp);
+                if (ch == '\n' && pos != filesize - 1) {
+                    break;
+                }
+                pos--;
+            }
+
+            if (pos < 0) {
+                pos = 0;
+            } else {
+                pos++; // Move after the newline
+            }
+
+            // Truncate the file at the found position
+            if (_chsize(_fileno(fp), pos) != 0) {
+                perror("Error truncating file");
+                fclose(fp);
+                return;
+            }
+
+            fclose(fp);
             return;
         }
+        
         // system("cls");
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
-    } else {
+    } 
+    else {
         set_color(LIGHT_RED);
         printf("\nFailed to submit issue.\n");
     }
