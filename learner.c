@@ -163,6 +163,7 @@ void submit_issue(const char *username) {
             }
 
             fclose(fp);
+            system("git commit -m \"Update issues.txt\" issues.txt");
             return;
         }
         
