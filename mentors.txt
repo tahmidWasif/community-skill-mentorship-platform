@@ -8,4 +8,3 @@ ment,pass,PSY,127.0.0.1
 mint,pass,IE,12.23.34.45
 kabir,kabir,Math,192.168.1.220
 tor,k,m,k
-tahsinmoga,tahsinmoga,Math,172.20.10.6
