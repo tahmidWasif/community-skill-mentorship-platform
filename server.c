@@ -1,10 +1,12 @@
 #include "server.h"
 #include "getPassword.h"
+#include "validateInput.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <windows.h>
 
 #define ISSUE_FILE "issues.txt"
 #define COMMENT_FILE "comments.txt"
@@ -55,14 +57,21 @@ void server_menu() {
         printf("1. View All Issues\n");
         printf("2. View All Comments\n");
         printf("3. Return to Main Menu\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
-        getchar();
+        printf("Enter your choice: ");
+        choice = getValidatedInteger();
 
         switch (choice) {
             case 1: view_all_issues(); break;
             case 2: view_all_comments(); break;
-            case 3: printf("Returning to main menu...\n"); break;
+            case 3: 
+                printf("Returning to main menu"); 
+                for (int i = 0; i < 3; i++){
+                    Sleep(300);
+                    printf(".");
+                }
+                Sleep(300);
+                system("cls");
+                break;
             default: printf("Invalid option.\n");
         }
     } while (choice != 3);
@@ -90,10 +99,8 @@ int mainServer() {
         printf("\n=== Main Menu ===\n");
         printf("1. Admin Login (Server Access)\n");
         printf("2. Exit\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);    //consumes leftover characters if there are any
+        printf("Enter your choice: ");
+        choice = getValidatedInteger();
 
         switch (choice) {
             case 1:
@@ -102,11 +109,15 @@ int mainServer() {
                 }
                 break;
             case 2:
-                printf("Exiting...\n");
-                while ((c = getchar()) != '\n' && c != EOF) printf("%d,", c);    //consumes leftover characters if there are any
+                printf("Exiting");
+                for (int i = 0; i < 3; i++){
+                    Sleep(300);
+                    printf(".");
+                }
+                Sleep(300);
+                system("cls");
                 break;
             default:
-                while ((c = getchar()) != '\n' && c != EOF) printf("%d,", c);    //consumes leftover characters if there are any
                 printf("Invalid option.\n");
         }
     } while (choice != 2);

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h>
 
 // Importing menu functions from other .c files
 #include "validateInput.h"
@@ -10,7 +11,7 @@ int main() {
     int mainChoice;
 
     while(1) {
-        printf("\n=== Program Selection Menu ===\n");
+        printf("\n=== Program Selection Menu ===\n\n");
         printf("1. Server Program\n");
         printf("2. Learner Program\n");
         printf("3. Mentor Program\n");
@@ -29,7 +30,13 @@ int main() {
                 mainMentor();
                 break;
             case 4:
-                printf("Exiting the entire program.\n");
+                printf("Exiting the entire program");
+                for (int i = 0; i < 3; i++){
+                    Sleep(300);
+                    printf(".");
+                }
+                Sleep(300);
+                system("cls");
                 return 0;
             default:
                 printf("Invalid choice. Please select again.\n");
