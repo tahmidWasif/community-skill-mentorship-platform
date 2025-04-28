@@ -2,6 +2,7 @@
 #include "getPassword.h"    // for getPassword() function
 #include "setColor.h"       // for set_color() function
 #include "validateInput.h"
+#include "safeGitPush.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,6 +79,7 @@ void signup_learner() {
 }
 
 void submit_issue(const char *username) {
+    tryPull:
     system("git pull origin chat");
     system("cls");
     char course[100], issue[256], ip[20];
@@ -113,7 +115,9 @@ void submit_issue(const char *username) {
         fclose(fp);
         // updating file to server
         system("git commit -m \"Update issues.txt\" issues.txt");
-        system("git push origin chat");
+        if (!safeGitPush()) {
+            goto tryPull;
+        }
         // system("cls");
         set_color(LIGHT_GREEN);
         printf("\nIssue submitted!\n");
