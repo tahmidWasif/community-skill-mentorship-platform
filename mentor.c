@@ -368,6 +368,7 @@ int mainMentor() {
                 printf(".");
             }
             Sleep(300);
+            set_color(BRIGHT_WHITE);
             system("cls");
             break;
         } else {
