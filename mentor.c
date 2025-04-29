@@ -52,6 +52,8 @@ void signup_mentor() {
     printf("Choose a username: ");
     fgets(username,sizeof(username),stdin);
     username[strcspn(username, "\n")] = '\0';
+    if (strlen(username)==0) {printf("\nUsername cannot be empty. Try again\n\n"); goto signUp;}
+    if (strcspn(username, " ")!=strlen(username)) {printf("\nUsername cannot contain spaces. Try again\n\n"); goto signUp;}
     //validate if username already exists
     char line[512], u[MAX_USERNAME_LENGTH], p[MAX_PASSWORD_LENGTH];
     rewind(fp);
