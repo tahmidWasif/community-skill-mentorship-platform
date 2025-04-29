@@ -32,6 +32,5 @@ void getPassword(char password[MAX_PASSWORD_LENGTH]) {
         password[i] = passwordChar;
         putch('*');
     }
-    getchar();
     printf("\n");
 }
