@@ -2,3 +2,4 @@
 2,kabir,MATH,Polar Coordinates,172.20.10.6
 1,wasifLearner,CS,live chat test,172.20.10.5
 2,wasifLearner,CS,file,172.20.10.5
+1,MiKair,International Project Finance,something something,127.0.0.1
